@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fajar Nur Farrijal | Portfolio Web Developer & Data Analyst</title>
+    <meta name="description" content="Portfolio professional Fajar Nur Farrijal - Teknik Informatika. Mengkhususkan diri dalam pengembangan web, analisis data, dan solusi teknologi inovatif.">
+    <link rel="icon" type="image/x-icon" href="public/images/profile.jpg">
+    
+    <!-- Google Fonts: Outfit & Space Grotesk -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom Style Sheet -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <!-- Space Particle Light Canvas Background -->
+    <div class="space-bg">
+        <div class="stars"></div>
+        <div class="nebula-1"></div>
+        <div class="nebula-2"></div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-user-astronaut"></i> Fajar<span>.space</span>
+            </a>
+            <nav class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active">Beranda</a>
+                <a href="#about" class="nav-link">Tentang</a>
+                <a href="#skills" class="nav-link">Skill</a>
+                <a href="#portfolio" class="nav-link">Portofolio</a>
+                <a href="#certificates" class="nav-link">Sertifikat</a>
+                <a href="#contact" class="nav-link">Kontak</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Ubah Tema">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero-section scroll-section">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <div class="hero-badge animate-init" data-delay="100">
+                        <span class="pulse-dot"></span> Welcome to my space
+                    </div>
+                    <h1 class="hero-title animate-init" data-delay="300">
+                        Halo, Saya <br><span class="gradient-text">Fajar Nur Farrijal</span>
+                    </h1>
+                    <p class="hero-subtitle animate-init" data-delay="500">
+                        Saya seorang lulusan <strong>Teknik Informatika</strong> yang mengkhususkan diri dalam pengembangan web, analisis data, dan solusi teknologi inovatif.
+                    </p>
+                    <div class="hero-buttons animate-init" data-delay="700">
+                        <a href="#portfolio" class="btn btn-primary">Lihat Project <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="#contact" class="btn btn-outline">Hubungi Saya</a>
+                    </div>
+                </div>
+                <div class="hero-visual animate-init" data-delay="400">
+                    <div class="avatar-wrapper">
+                        <div class="orbit orbit-1"></div>
+                        <div class="orbit orbit-2"></div>
+                        <div class="profile-glow"></div>
+                        <img src="public/images/profile.jpg" alt="Foto Profile Fajar Nur Farrijal" class="profile-img">
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <span>Scroll Down</span>
+                <i class="fa-solid fa-chevron-down scroll-arrow"></i>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section scroll-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <p class="section-tag">TENTANG SAYA</p>
+                    <h2 class="section-title">Memecahkan Masalah Melalui Kode</h2>
+                </div>
+                <div class="about-grid">
+                    <div class="about-text-card glass-card">
+                        <i class="fa-solid fa-rocket card-icon"></i>
+                        <p class="about-desc">
+                            Saya memiliki gairah besar dalam memecahkan masalah kompleks melalui kode. Dengan latar belakang Informatika, saya fokus pada pembuatan sistem yang efisien dan desain yang bersih, menggabungkan fungsionalitas teknis dengan estetika visual.
+                        </p>
+                        <p class="about-desc">
+                            Bagi saya, pemrograman bukan sekadar menulis baris instruksi, melainkan merancang solusi cerdas yang mempermudah kehidupan sehari-hari dan mendorong transformasi digital yang bermanfaat bagi pengguna.
+                        </p>
+                        <div class="about-details">
+                            <div class="detail-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <div>
+                                    <h4>Lokasi</h4>
+                                    <p>Karawang Barat, Jawa Barat</p>
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <div>
+                                    <h4>Pendidikan</h4>
+                                    <p>S1 Teknik Informatika</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="about-highlight-card glass-card">
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <span class="stat-number">5+</span>
+                                <span class="stat-label">Project Utama</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">100%</span>
+                                <span class="stat-label">Komitmen</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">UI/UX</span>
+                                <span class="stat-label">Fokus Estetika</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">Data</span>
+                                <span class="stat-label">Analisis Akurat</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="skills-section scroll-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <p class="section-tag">SKILLSET & KEAHLIAN</p>
+                    <h2 class="section-title">Visualisasi Kemampuan</h2>
+                </div>
+                <div class="skills-grid">
+                    <div class="skills-chart-container glass-card">
+                        <h3>Radar Keahlian</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="skillsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="skills-list-container">
+                        <div class="skills-category glass-card">
+                            <h4><i class="fa-solid fa-code text-accent"></i> Frontend Development</h4>
+                            <div class="skill-tags">
+                                <span class="skill-tag">HTML5</span>
+                                <span class="skill-tag">CSS3</span>
+                                <span class="skill-tag">JavaScript (ES6+)</span>
+                                <span class="skill-tag">Tailwind CSS</span>
+                                <span class="skill-tag">Bootstrap</span>
+                                <span class="skill-tag">Responsive UI</span>
+                            </div>
+                        </div>
+                        <div class="skills-category glass-card">
+                            <h4><i class="fa-solid fa-server text-accent"></i> Backend & Database</h4>
+                            <div class="skill-tags">
+                                <span class="skill-tag">PHP</span>
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">MySQL / SQL</span>
+                                <span class="skill-tag">RESTful API</span>
+                                <span class="skill-tag">Database Design</span>
+                            </div>
+                        </div>
+                        <div class="skills-category glass-card">
+                            <h4><i class="fa-solid fa-chart-line text-accent"></i> Analisis Data & Solusi</h4>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Data Visualization</span>
+                                <span class="skill-tag">Sistem ATS</span>
+                                <span class="skill-tag">Point of Sale (POS)</span>
+                                <span class="skill-tag">UI/UX Design</span>
+                                <span class="skill-tag">Problem Solving</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section id="portfolio" class="portfolio-section scroll-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <p class="section-tag">PORTFOLIO PROJECT</p>
+                    <h2 class="section-title">Koleksi Hasil Karya</h2>
+                </div>
+                
+                <!-- Category Tabs Filters -->
+                <div class="portfolio-filters">
+                    <button class="filter-btn active" data-filter="all">Semua</button>
+                    <button class="filter-btn" data-filter="ats">Sistem ATS</button>
+                    <button class="filter-btn" data-filter="pos">Sistem POS</button>
+                    <button class="filter-btn" data-filter="legal">Portal Hukum</button>
+                    <button class="filter-btn" data-filter="umkm">Web UMKM</button>
+                </div>
+                
+                <!-- Horizontally Scrollable Grid Container -->
+                <div class="portfolio-scroll-wrapper">
+                    <button class="scroll-nav-btn scroll-prev" aria-label="Previous Project">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="portfolio-scroll-container" id="portfolioScroll">
+                        
+                        <!-- Project Card 1: Warkop Pendopo -->
+                        <div class="project-card glass-card" data-category="umkm" onclick="openProjectModal('warkop')">
+                            <div class="project-img-wrapper">
+                                <img src="public/images/project kopi 1.png" alt="Warkop Pendopo Thumbnail">
+                                <span class="screenshot-badge"><i class="fa-regular fa-images"></i> 4 Galeri</span>
+                                <div class="project-overlay">
+                                    <span class="btn-detail">Lihat Detail <i class="fa-solid fa-maximize"></i></span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <span class="project-tag-badge">Web UMKM</span>
+                                <h3 class="project-card-title">Warung Kopi Pendopo</h3>
+                                <p class="project-card-desc">Website landing page & reservasi tempat kopi tradisional khas Karawang dengan WhatsApp ordering.</p>
+                                <div class="project-card-tech">
+                                    <span>HTML</span><span>CSS</span><span>JS</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Card 2: Yogya Fresh System Pro -->
+                        <div class="project-card glass-card" data-category="pos" onclick="openProjectModal('yogya')">
+                            <div class="project-img-wrapper">
+                                <img src="public/images/project pos 1.png" alt="Yogya Fresh System Pro Thumbnail">
+                                <span class="screenshot-badge"><i class="fa-regular fa-images"></i> 3 Galeri</span>
+                                <div class="project-overlay">
+                                    <span class="btn-detail">Lihat Detail <i class="fa-solid fa-maximize"></i></span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <span class="project-tag-badge">Sistem POS</span>
+                                <h3 class="project-card-title">Yogya Fresh System Pro</h3>
+                                <p class="project-card-desc">Portal manajemen harga & label produk segar supermarket untuk efisiensi informasi produk.</p>
+                                <div class="project-card-tech">
+                                    <span>Web Portal</span><span>POS Admin</span><span>Security Access</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Card 3: Vie Roku Management -->
+                        <div class="project-card glass-card" data-category="ats" onclick="openProjectModal('vieroku')">
+                            <div class="project-img-wrapper">
+                                <img src="public/images/project rekrut 1.png" alt="Vie Roku Management Thumbnail">
+                                <span class="screenshot-badge"><i class="fa-regular fa-images"></i> 3 Galeri</span>
+                                <div class="project-overlay">
+                                    <span class="btn-detail">Lihat Detail <i class="fa-solid fa-maximize"></i></span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <span class="project-tag-badge">Sistem Rekrutmen</span>
+                                <h3 class="project-card-title">Vie Roku Management</h3>
+                                <p class="project-card-desc">Sistem portal karir terpadu, registrasi member, lowongan pekerjaan, dan modul pelatihan profesional.</p>
+                                <div class="project-card-tech">
+                                    <span>Job Portal</span><span>Member</span><span>PHP</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Card 4: ZS Law Firm -->
+                        <div class="project-card glass-card" data-category="legal" onclick="openProjectModal('zslaw')">
+                            <div class="project-img-wrapper">
+                                <img src="public/images/legal 1.png" alt="ZS Law Firm Thumbnail">
+                                <span class="screenshot-badge"><i class="fa-regular fa-images"></i> 5 Galeri</span>
+                                <div class="project-overlay">
+                                    <span class="btn-detail">Lihat Detail <i class="fa-solid fa-maximize"></i></span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <span class="project-tag-badge">Portal Hukum</span>
+                                <h3 class="project-card-title">ZS Law Firm & Associate</h3>
+                                <p class="project-card-desc">Platform portal hukum modern "Future Legal" untuk konsultasi virtual, manajemen dokumen hukum.</p>
+                                <div class="project-card-tech">
+                                    <span>Legal Tech</span><span>Admin Portal</span><span>Light/Dark Mode</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Project Card 5: PT Indonesia AI ATS -->
+                        <div class="project-card glass-card" data-category="ats" onclick="openProjectModal('smartats')">
+                            <div class="project-img-wrapper">
+                                <img src="public/images/kategori sedang dikerjakan 1.png" alt="Smart ATS Thumbnail">
+                                <span class="screenshot-badge"><i class="fa-regular fa-images"></i> 10 Galeri</span>
+                                <div class="project-overlay">
+                                    <span class="btn-detail">Lihat Detail <i class="fa-solid fa-maximize"></i></span>
+                                </div>
+                            </div>
+                            <div class="project-info">
+                                <span class="project-tag-badge">Sistem ATS (Ongoing)</span>
+                                <h3 class="project-card-title">Smart ATS Portal</h3>
+                                <p class="project-card-desc">Applicant Tracking System dengan AI screening matching, visualisasi proses rekrutmen & funnel pelamar.</p>
+                                <div class="project-card-tech">
+                                    <span>AI Screening</span><span>Kanban Board</span><span>Analytics</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <button class="scroll-nav-btn scroll-next" aria-label="Next Project">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="swipe-hint">
+                    <i class="fa-solid fa-hand-pointer"></i> Geser ke kanan untuk melihat project lainnya
+                </div>
+            </div>
+        </section>
+
+        <!-- Certificates Section -->
+        <section id="certificates" class="certificates-section scroll-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <p class="section-tag">SERTIFIKAT PRESTASI</p>
+                    <h2 class="section-title">Penghargaan Resmi</h2>
+                </div>
+                <div class="certificates-grid">
+                    
+                    <!-- Cert 1 -->
+                    <div class="cert-card glass-card" onclick="openCertLightbox(0)">
+                        <div class="cert-img-container">
+                            <img src="public/images/Sertifikat Juara Respective Fest Vol.1 - Universitas Brawijaya_page-0001.jpg" alt="Sertifikat Juara Respective Fest Universitas Brawijaya Halaman 1">
+                            <div class="cert-overlay">
+                                <i class="fa-solid fa-magnifying-glass-plus"></i>
+                            </div>
+                        </div>
+                        <div class="cert-info">
+                            <h4>Juara Respective Fest Vol.1</h4>
+                            <p>Universitas Brawijaya</p>
+                        </div>
+                    </div>
+
+                    <!-- Cert 2 -->
+                    <div class="cert-card glass-card" onclick="openCertLightbox(1)">
+                        <div class="cert-img-container">
+                            <img src="public/images/2Sertifikat Juara Respective Fest Vol.1 - Universitas Brawijaya (1)_page-0001.jpg" alt="Sertifikat Juara Respective Fest Universitas Brawijaya Halaman 2">
+                            <div class="cert-overlay">
+                                <i class="fa-solid fa-magnifying-glass-plus"></i>
+                            </div>
+                        </div>
+                        <div class="cert-info">
+                            <h4>Sertifikat Penghargaan Tambahan</h4>
+                            <p>Universitas Brawijaya</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section scroll-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <p class="section-tag">HUBUNGI SAYA</p>
+                    <h2 class="section-title">Hubungkan Gagasan Anda</h2>
+                </div>
+                <div class="contact-grid">
+                    <div class="contact-info-cards">
+                        
+                        <!-- Address -->
+                        <div class="info-card glass-card">
+                            <i class="fa-solid fa-map-location-dot info-icon"></i>
+                            <div class="info-details">
+                                <h3>Alamat</h3>
+                                <p>Karawang Barat, Jawa Barat, Indonesia</p>
+                            </div>
+                        </div>
+
+                        <!-- Phone -->
+                        <a href="https://wa.me/62895806317711" target="_blank" rel="noopener noreferrer" class="info-card glass-card interactive-card">
+                            <i class="fa-solid fa-phone info-icon"></i>
+                            <div class="info-details">
+                                <h3>No Handphone / WhatsApp</h3>
+                                <p>0895806317711</p>
+                                <span class="card-link">Hubungi Chat <i class="fa-solid fa-up-right-from-square"></i></span>
+                            </div>
+                        </a>
+
+                        <!-- Email -->
+                        <div class="info-card glass-card">
+                            <i class="fa-solid fa-envelope info-icon"></i>
+                            <div class="info-details">
+                                <h3>Email</h3>
+                                <p>Fajar Nur Farrijal</p>
+                                <span class="text-muted">fajar.nurfarrijal@email.com</span>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <!-- Contact Form -->
+                    <div class="contact-form-container glass-card">
+                        <h3>Kirim Pesan Langsung</h3>
+                        <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="name">Nama Lengkap</label>
+                                    <input type="text" id="name" required placeholder="Masukkan nama Anda">
+                                </div>
+                                <div class="form-group">
+                                    <label for="emailInput">Alamat Email</label>
+                                    <input type="email" id="emailInput" required placeholder="nama@email.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subjek</label>
+                                <input type="text" id="subject" required placeholder="Judul pesan Anda">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Pesan Anda</label>
+                                <textarea id="message" rows="5" required placeholder="Tulis pesan detail Anda di sini..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                Kirim Pesan <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                        <div class="form-status" id="formStatus"></div>
+                    </div>
+                </div>
+
+                <!-- Social Connect Buttons -->
+                <div class="social-connect">
+                    <h3>Hubungi Saya Di Media Sosial</h3>
+                    <div class="social-links-row">
+                        <a href="https://www.linkedin.com/in/fajar-nur-farrijal-448644255/" target="_blank" rel="noopener noreferrer" class="social-btn linkedin-btn" aria-label="LinkedIn Profile">
+                            <i class="fa-brands fa-linkedin-in"></i> LinkedIn
+                        </a>
+                        <a href="https://www.instagram.com/fjrrnf_26?igsh=bjZmbGVqMnEwb3hj" target="_blank" rel="noopener noreferrer" class="social-btn instagram-btn" aria-label="Instagram Profile">
+                            <i class="fa-brands fa-instagram"></i> Instagram
+                        </a>
+                        <a href="https://wa.me/62895806317711" target="_blank" rel="noopener noreferrer" class="social-btn whatsapp-btn" aria-label="WhatsApp Chat">
+                            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2026 Fajar Nur Farrijal. All Rights Reserved.</p>
+            <p class="footer-sub">Dirancang dengan tema Premium Space Light.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Project Details Modal -->
+    <div class="modal" id="projectModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-backdrop" onclick="closeProjectModal()"></div>
+        <div class="modal-content glass-card">
+            <button class="modal-close" onclick="closeProjectModal()" aria-label="Tutup Detail Project">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <div class="modal-body">
+                <div class="project-carousel-container">
+                    <div class="carousel-track-wrapper">
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- JS will inject images here -->
+                        </div>
+                    </div>
+                    <button class="carousel-btn c-prev" id="carouselPrevBtn" aria-label="Previous Slide">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-btn c-next" id="carouselNextBtn" aria-label="Next Slide">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <div class="carousel-dots" id="carouselDots">
+                        <!-- JS will inject dots here -->
+                    </div>
+                </div>
+                <div class="project-detail-info">
+                    <div class="detail-header">
+                        <span class="project-tag-badge" id="modalCategory">Category</span>
+                        <h2 class="project-detail-title" id="modalTitle">Project Title</h2>
+                    </div>
+                    <div class="project-detail-desc" id="modalDescription">
+                        <!-- JS will inject description here -->
+                    </div>
+                    <div class="project-features-block">
+                        <h4>Fitur & Fungsionalitas Utama</h4>
+                        <ul class="features-list" id="modalFeatures">
+                            <!-- JS will inject features here -->
+                        </ul>
+                    </div>
+                    <div class="modal-footer-info">
+                        <h4>Teknologi & Tools:</h4>
+                        <div class="project-card-tech" id="modalTech">
+                            <!-- JS will inject tech badges here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Lightbox Modal -->
+    <div class="lightbox" id="certLightbox" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="lightbox-backdrop" onclick="closeCertLightbox()"></div>
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeCertLightbox()" aria-label="Tutup Gambar">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <img src="" alt="Certificate Zoomed" id="lightboxImg">
+            <div class="lightbox-caption" id="lightboxCaption">Sertifikat Penghargaan</div>
+        </div>
+    </div>
+
+    <!-- Main JS Code -->
+    <script src="script.js"></script>
+</body>
+</html>
