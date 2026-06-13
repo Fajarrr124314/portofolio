@@ -812,3 +812,25 @@ function initProjectCardEffects() {
         });
     });
 }
+
+/* ==========================================================================
+   12. CV LIGHTBOX VIEW
+   ========================================================================== */
+
+function openCvLightbox() {
+    const lightbox = document.getElementById('certLightbox');
+    const img = document.getElementById('lightboxImg');
+    const caption = document.getElementById('lightboxCaption');
+    if (!lightbox || !img || !caption) return;
+
+    img.src = "public/images/CV_FAJARNF_UPDATE_page-0001.jpg";
+    caption.textContent = "Curriculum Vitae - Fajar Nur Farrijal";
+
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Reuse the keyboard handler from certificate lightbox
+    document.addEventListener('keydown', handleLightboxKeys);
+}
+
+window.openCvLightbox = openCvLightbox;
