@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initPortfolioScroll();
     initPortfolioFilters();
+    initTypewriter();
+    initProjectCardEffects();
 });
 
 /* ==========================================================================
@@ -292,7 +294,7 @@ function initPortfolioFilters() {
    6. PORTFOLIO DETAILED MULTI-IMAGE CAROUSEL MODAL DATA & FUNCTIONS
    ========================================================================== */
 
-// Detailed descriptions and features for the projects
+/// Detailed descriptions and features for the projects
 const projectData = {
     warkop: {
         title: "Warung Kopi Pendopo",
@@ -311,7 +313,9 @@ const projectData = {
             "Responsive Suasana Gallery: Koleksi foto suasana kedai pendopo tradisional yang nyaman dengan grid responsif.",
             "Google Maps & Contact: Peta penunjuk jalan interaktif untuk mempermudah navigasi pembeli ke lokasi."
         ],
-        tech: ["HTML5", "CSS3", "Vanilla JS", "WhatsApp API", "Responsive Grid"]
+        tech: ["HTML5", "CSS3", "Vanilla JS", "WhatsApp API", "Responsive Grid"],
+        demoLink: "https://wa.me/62895806317711",
+        repoLink: "https://github.com/Fajarrr124314/warkop-pendopo"
     },
     yogya: {
         title: "Yogya Fresh System Pro",
@@ -323,13 +327,15 @@ const projectData = {
             "public/images/project pos 3.png"
         ],
         features: [
-            "Secure Access Portal: Login terenkripsi khusus untuk staf administrator dan operator retail.",
+            "Secure Access Portal: Login terenkripsi khusus untuk staf administrator and operator retail.",
             "Dynamic Label Barcode Generator: Mencetak label produk segar lengkap dengan nama, kode SKU, berat, tanggal kemas, dan barcode.",
             "Inventory Database Management: Panel CRUD (Create, Read, Update, Delete) data produk segar supermarket.",
             "Real-time Price Synchronization: Update harga jual harian untuk mencegah perbedaan harga kasir dengan etalase.",
             "Print Queue Logs: Catatan histori aktivitas cetak label oleh operator."
         ],
-        tech: ["POS Integration", "Barcode System", "Security Access", "Database Design", "Web Portal"]
+        tech: ["POS Integration", "Barcode System", "Security Access", "Database Design", "Web Portal"],
+        demoLink: "",
+        repoLink: "https://github.com/Fajarrr124314/yogya-fresh-system-pro"
     },
     vieroku: {
         title: "Vie Roku Management Career Platform",
@@ -347,7 +353,9 @@ const projectData = {
             "Application Tracking Status: Halaman ringkasan lamaran bagi pencari kerja untuk memantau status seleksi.",
             "Admin Recruitment Board: Panel admin untuk memposting info lowongan kerja dan mengelola data pelamar."
         ],
-        tech: ["Job Portal", "Membership System", "PHP", "MySQL", "CSS Grid & Flexbox"]
+        tech: ["Job Portal", "Membership System", "PHP", "MySQL", "CSS Grid & Flexbox"],
+        demoLink: "",
+        repoLink: "https://github.com/Fajarrr124314/vieroku-management"
     },
     zslaw: {
         title: "ZS Law Firm & Associate Digital Portal",
@@ -361,13 +369,15 @@ const projectData = {
             "public/images/legal 5.png"
         ],
         features: [
-            "Online Case Consultation Form: Memudahkan klien mengajukan analisis awal kasus hukum mereka.",
+            "Online Case Case Consultation Form: Memudahkan klien mengajukan analisis awal kasus hukum mereka.",
             "Lawyer Scheduling Calendar: Sistem pemesanan jadwal tatap muka/telekonsultasi bersama partner pengacara.",
             "Legal Drafting Module: Manajemen pengunggahan dan revisi draf surat perjanjian atau dokumen legalitas.",
             "Premium Dark & Light UI Toggle: Antarmuka premium dengan transisi warna halus untuk kenyamanan membaca berkas hukum.",
             "Law Firm Admin Board: Kelola portofolio pengacara, bidang keahlian hukum, dan detail tagihan klien."
         ],
-        tech: ["Tailwind CSS", "Legal Tech Features", "Interactive Theme Toggle", "Admin Dashboard"]
+        tech: ["Tailwind CSS", "Legal Tech Features", "Interactive Theme Toggle", "Admin Dashboard"],
+        demoLink: "https://fajarrr124314.github.io/zslawfirm",
+        repoLink: "https://github.com/Fajarrr124314/zslawfirm"
     },
     smartats: {
         title: "Smart ATS Portal - PT Indonesia",
@@ -392,7 +402,9 @@ const projectData = {
             "Candidate Detailed Review Page: Memeriksa berkas CV, sertifikat, dan menginput nilai tes seleksi pelamar secara terpadu.",
             "Activity Logs: Riwayat operasional recruiter (seperti Fajar NF - Admin HRD) untuk menjaga transparansi proses seleksi."
         ],
-        tech: ["Node.js", "AI CV Screening", "Kanban Logic", "HR Analytics", "SQL Database"]
+        tech: ["Node.js", "AI CV Screening", "Kanban Logic", "HR Analytics", "SQL Database"],
+        demoLink: "",
+        repoLink: "https://github.com/Fajarrr124314/smart-ats"
     }
 };
 
@@ -461,6 +473,24 @@ function openProjectModal(projectKey) {
 
     // Configure Navigation Buttons
     updateCarouselButtons();
+
+    // Set Action Links (Live Demo & Source Code)
+    const liveLinkBtn = document.getElementById('modalLiveLink');
+    const repoLinkBtn = document.getElementById('modalRepoLink');
+    
+    if (project.demoLink) {
+        liveLinkBtn.href = project.demoLink;
+        liveLinkBtn.style.display = 'inline-flex';
+    } else {
+        liveLinkBtn.style.display = 'none';
+    }
+    
+    if (project.repoLink) {
+        repoLinkBtn.href = project.repoLink;
+        repoLinkBtn.style.display = 'inline-flex';
+    } else {
+        repoLinkBtn.style.display = 'none';
+    }
 
     // Show Modal
     const modal = document.getElementById('projectModal');
@@ -688,4 +718,97 @@ function updateChartTheme(isDark) {
     }
     
     skillsChartInstance.update();
+}
+
+/* ==========================================================================
+   10. HERO TYPEWRITER DYNAMIC TEXT EFFECT
+   ========================================================================== */
+
+function initTypewriter() {
+    const target = document.getElementById('typewriter');
+    if (!target) return;
+    
+    const words = [
+        "pengembangan web.",
+        "analisis data.",
+        "desain UI/UX.",
+        "solusi teknologi inovatif."
+    ];
+    
+    let wordIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 100;
+    
+    function type() {
+        const currentWord = words[wordIndex];
+        
+        if (isDeleting) {
+            target.textContent = currentWord.substring(0, charIndex - 1);
+            charIndex--;
+            typingSpeed = 50; // Erase speed
+        } else {
+            target.textContent = currentWord.substring(0, charIndex + 1);
+            charIndex++;
+            typingSpeed = 100; // Type speed
+        }
+        
+        if (!isDeleting && charIndex === currentWord.length) {
+            isDeleting = true;
+            typingSpeed = 2000; // Pause at end of word
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            wordIndex = (wordIndex + 1) % words.length;
+            typingSpeed = 500; // Pause before typing next word
+        }
+        
+        setTimeout(type, typingSpeed);
+    }
+    
+    setTimeout(type, 1000); // Initial delay
+}
+
+/* ==========================================================================
+   11. INTERACTIVE 3D TILT & MOUSE SPOTLIGHT GLOW ON PROJECT CARDS
+   ========================================================================== */
+
+function initProjectCardEffects() {
+    const cards = document.querySelectorAll('.project-card');
+    if (cards.length === 0) return;
+    
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Set CSS variables for spotlight glow
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+            
+            // Calculate 3D tilt angle
+            const width = rect.width;
+            const height = rect.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            
+            const mouseX = x - centerX;
+            const mouseY = y - centerY;
+            
+            // Limit max rotation to 8 degrees for subtle/premium feel
+            const maxRotation = 8;
+            const rotateX = -((mouseY / centerY) * maxRotation).toFixed(2);
+            const rotateY = ((mouseX / centerX) * maxRotation).toFixed(2);
+            
+            // Apply inline style with translateY (for hover lift) and rotateX/rotateY
+            card.style.transform = `perspective(1000px) translateY(-12px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            // Reset style properties to let CSS transition them back smoothly
+            card.style.transform = '';
+            card.style.setProperty('--mouse-x', '0px');
+            card.style.setProperty('--mouse-y', '0px');
+        });
+    });
 }

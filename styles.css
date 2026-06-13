@@ -400,11 +400,22 @@ body.dark-theme .header.scrolled {
     gap: 15px;
 }
 
+.avatar-wrapper {
+    position: relative;
+    width: 440px;
+    height: 440px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
 .profile-img {
-    width: 250px;
-    height: 250px;
+    width: 380px;
+    height: 380px;
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
     object-fit: cover;
+    object-position: center 15%;
     z-index: 5;
     border: 5px solid var(--bg-secondary);
     box-shadow: 0 20px 50px rgba(108, 92, 231, 0.15);
@@ -419,8 +430,11 @@ body.dark-theme .profile-img {
 
 .profile-glow {
     position: absolute;
-    width: 260px;
-    height: 260px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 390px;
+    height: 390px;
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
     background: radial-gradient(circle, rgba(var(--accent-rgb), 0.45) 0%, rgba(var(--accent-cyan-rgb), 0.25) 70%, transparent 100%);
     filter: blur(20px);
@@ -432,13 +446,16 @@ body.dark-theme .profile-img {
 /* Planetary Orbits */
 .orbit {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     border: 1.5px dashed rgba(var(--accent-rgb), 0.25);
     animation: spin 30s infinite linear;
 }
 
 .orbit-1 {
-    width: 290px;
-    height: 290px;
+    width: 420px;
+    height: 420px;
     border-radius: 40% 60% 65% 35% / 40% 45% 55% 60%;
     border-color: rgba(var(--accent-rgb), 0.25);
     animation-duration: 20s;
@@ -457,8 +474,8 @@ body.dark-theme .profile-img {
 }
 
 .orbit-2 {
-    width: 330px;
-    height: 330px;
+    width: 460px;
+    height: 460px;
     border-radius: 65% 35% 45% 55% / 40% 60% 65% 35%;
     border-color: rgba(var(--accent-cyan-rgb), 0.20);
     animation-duration: 35s;
@@ -786,17 +803,56 @@ body.dark-theme .profile-img {
     border-radius: var(--border-radius-md);
     transform-style: preserve-3d;
     transform: rotateX(0deg) rotateY(0deg) translateY(0);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease, background-color 0.4s ease;
+    transition: 
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+        border-color 0.4s ease, 
+        box-shadow 0.4s ease, 
+        background-color 0.4s ease,
+        opacity 0.4s ease,
+        flex-basis 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        margin 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .project-card:hover {
-    transform: translateY(-12px) rotateX(4deg) rotateY(-4deg);
+    transition: transform 0.1s ease, border-color 0.4s ease, box-shadow 0.4s ease;
     border-color: var(--accent);
     box-shadow: 0 25px 50px -10px rgba(108, 92, 231, 0.22);
 }
 
 body.dark-theme .project-card:hover {
     box-shadow: 0 25px 50px -10px rgba(108, 92, 231, 0.45);
+}
+
+/* Mouse-Tracking Spotlight Overlay */
+.project-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+        rgba(var(--accent-rgb), 0.06),
+        transparent 40%
+    );
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.project-card:hover::after {
+    opacity: 1;
+}
+
+body.dark-theme .project-card::after {
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 0) var(--mouse-y, 0),
+        rgba(var(--accent-cyan-rgb), 0.12),
+        transparent 40%
+    );
 }
 
 .screenshot-badge {
@@ -973,7 +1029,15 @@ body.dark-theme .project-card:hover {
 
 /* Hide cards that are filtered out */
 .project-card.filtered-out {
-    display: none !important;
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    pointer-events: none;
+    flex-basis: 0 !important;
+    margin-left: -15px !important;
+    margin-right: -15px !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-width: 0 !important;
 }
 
 /* ==========================================================================
@@ -1663,10 +1727,10 @@ body.dark-theme .project-card:hover {
 
 @keyframes spin {
     from {
-        transform: rotate(0deg);
+        transform: translate(-50%, -50%) rotate(0deg);
     }
     to {
-        transform: rotate(360deg);
+        transform: translate(-50%, -50%) rotate(360deg);
     }
 }
 
@@ -1801,23 +1865,23 @@ body.dark-theme .project-card:hover {
     }
     
     .avatar-wrapper {
-        width: 260px;
-        height: 260px;
+        width: 300px;
+        height: 300px;
     }
     
     .profile-img {
-        width: 200px;
-        height: 200px;
-    }
-    
-    .orbit-1 {
         width: 240px;
         height: 240px;
     }
     
+    .orbit-1 {
+        width: 270px;
+        height: 270px;
+    }
+    
     .orbit-2 {
-        width: 280px;
-        height: 280px;
+        width: 295px;
+        height: 295px;
     }
     
     .section-title {
@@ -1986,5 +2050,56 @@ body.dark-theme .btn-submit:hover {
     body.dark-theme .nav-menu {
         background: rgba(12, 12, 32, 0.95);
     }
+}
+
+/* ==========================================================================
+   11. TYPEWRITER EFFECT & ANIMATIONS
+   ========================================================================== */
+
+.typewriter-text {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+body.dark-theme .typewriter-text {
+    color: var(--accent-cyan);
+}
+
+.typewriter-cursor {
+    color: var(--accent);
+    font-weight: 400;
+    animation: blinkCursor 0.8s infinite;
+}
+
+body.dark-theme .typewriter-cursor {
+    color: var(--accent-cyan);
+}
+
+@keyframes blinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ==========================================================================
+   12. PROJECT DETAIL MODAL ACTION BUTTONS
+   ========================================================================== */
+
+.modal-actions-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding-top: 20px;
+}
+
+body.dark-theme .modal-actions-row {
+    border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.modal-actions-row .btn {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+    flex: 1;
+    white-space: nowrap;
 }
 
