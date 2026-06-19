@@ -133,6 +133,50 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Interactive Journey Timeline -->
+                <div class="timeline-wrapper animate-init" data-delay="300">
+                    <h3 class="timeline-heading"><i class="fa-solid fa-user-astronaut"></i> Orbit Perjalanan & Proyek (Milestones)</h3>
+                    <div class="timeline-visual-wrapper">
+                        <div class="timeline-line"></div>
+                        <div class="timeline-nodes" id="timelineNodes">
+                            <!-- Node 2023 -->
+                            <div class="timeline-node active" data-year="2023" onclick="selectTimelineYear('2023')">
+                                <div class="node-dot"></div>
+                                <span class="node-year">2023</span>
+                            </div>
+                            <!-- Node 2025 -->
+                            <div class="timeline-node" data-year="2025" onclick="selectTimelineYear('2025')">
+                                <div class="node-dot"></div>
+                                <span class="node-year">2025</span>
+                            </div>
+                            <!-- Node 2026 -->
+                            <div class="timeline-node" data-year="2026" onclick="selectTimelineYear('2026')">
+                                <div class="node-dot"></div>
+                                <span class="node-year">2026</span>
+                            </div>
+                            <!-- Node 2027 -->
+                            <div class="timeline-node" data-year="2027" onclick="selectTimelineYear('2027')">
+                                <div class="node-dot"></div>
+                                <span class="node-year">2027</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Details Card -->
+                    <div class="timeline-detail-card glass-card" id="timelineDetailCard">
+                        <div class="timeline-detail-header">
+                            <span class="detail-year-badge" id="timelineYearBadge">2023</span>
+                            <h4 class="detail-title" id="timelineDetailTitle">Mulai Pendidikan S1 Informatika</h4>
+                        </div>
+                        <p class="detail-desc" id="timelineDetailDesc">
+                            Memulai pendidikan formal S1 Informatika. Mempelajari konsep dasar pemrograman, dasar-dasar web, algoritma, serta merintis kecintaan dalam pengembangan perangkat lunak dan analisis data.
+                        </p>
+                        <div class="detail-techs" id="timelineDetailTechs">
+                            <span>S1 Informatika</span><span>Algoritma</span><span>Pemrograman Dasar</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -242,6 +286,85 @@
                                 <span class="skill-tag">UI/UX Design</span>
                                 <span class="skill-tag">Problem Solving</span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GitHub Stats & Data Analytics Section -->
+        <section id="stats-analytics" class="stats-section scroll-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <p class="section-tag">LIVE STATISTICS</p>
+                    <h2 class="section-title">Aktivitas & Analisis Data</h2>
+                </div>
+                <div class="stats-grid">
+                    <!-- GitHub Profile Card -->
+                    <div class="github-card glass-card animate-init" data-delay="200">
+                        <h3><i class="fa-brands fa-github"></i> GitHub Live Profile</h3>
+                        <div id="githubLoading" class="github-loading">
+                            <i class="fa-solid fa-circle-notch fa-spin"></i> Memuat data GitHub...
+                        </div>
+                        <div id="githubProfile" class="github-profile-content" style="display: none;">
+                            <div class="gh-header">
+                                <img id="ghAvatar" src="" alt="GitHub Avatar" class="gh-avatar">
+                                <div class="gh-info">
+                                    <h4 id="ghName">Fajar Nur Farrijal</h4>
+                                    <p id="ghBio" class="text-muted"></p>
+                                    <a id="ghLink" href="" target="_blank" class="btn btn-outline gh-btn-sm"><i class="fa-brands fa-github"></i> Kunjungi Profil</a>
+                                </div>
+                            </div>
+                            <div class="gh-stats-row">
+                                <div class="gh-stat-box">
+                                    <span class="gh-stat-num" id="ghRepos">0</span>
+                                    <span class="gh-stat-label">Repositori</span>
+                                </div>
+                                <div class="gh-stat-box">
+                                    <span class="gh-stat-num" id="ghFollowers">0</span>
+                                    <span class="gh-stat-label">Pengikut</span>
+                                </div>
+                            </div>
+                            <div class="gh-repos-block">
+                                <h4>Repositori Terpopuler:</h4>
+                                <ul class="gh-repos-list" id="ghReposList">
+                                    <!-- Dynamic list of repositories -->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Data Analytics Card -->
+                    <div class="analytics-card glass-card animate-init" data-delay="400">
+                        <div class="analytics-header">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Dashboard Analitik Proyek</h3>
+                            <div class="analytics-filter">
+                                <label for="projectFilter">Kategori:</label>
+                                <select id="projectFilter" onchange="updateAnalyticsDashboard(this.value)">
+                                    <option value="all">Semua Bidang</option>
+                                    <option value="web">Web Development</option>
+                                    <option value="data">Data Analysis</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mini-metrics-row">
+                            <div class="metric-box">
+                                <span class="metric-val" id="metricProjects">5</span>
+                                <span class="metric-lbl">Total Proyek</span>
+                            </div>
+                            <div class="metric-box">
+                                <span class="metric-val" id="metricHours">320+</span>
+                                <span class="metric-lbl">Jam Kerja (Est.)</span>
+                            </div>
+                            <div class="metric-box">
+                                <span class="metric-val" id="metricLanguages">HTML, PHP, JS</span>
+                                <span class="metric-lbl">Tech Utama</span>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-wrapper-analytics">
+                            <canvas id="analyticsChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -475,23 +598,26 @@
                     <div class="contact-form-container glass-card">
                         <h3>Kirim Pesan Langsung</h3>
                         <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                            <!-- Web3Forms Access Key (Ganti YOUR_ACCESS_KEY_HERE dengan key Anda) -->
+                            <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+                            
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="name">Nama Lengkap</label>
-                                    <input type="text" id="name" required placeholder="Masukkan nama Anda">
+                                    <input type="text" id="name" name="name" required placeholder="Masukkan nama Anda">
                                 </div>
                                 <div class="form-group">
                                     <label for="emailInput">Alamat Email</label>
-                                    <input type="email" id="emailInput" required placeholder="nama@email.com">
+                                    <input type="email" id="emailInput" name="email" required placeholder="nama@email.com">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="subject">Subjek</label>
-                                <input type="text" id="subject" required placeholder="Judul pesan Anda">
+                                <input type="text" id="subject" name="subject" required placeholder="Judul pesan Anda">
                             </div>
                             <div class="form-group">
                                 <label for="message">Pesan Anda</label>
-                                <textarea id="message" rows="5" required
+                                <textarea id="message" name="message" rows="5" required
                                     placeholder="Tulis pesan detail Anda di sini..."></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary btn-submit">
@@ -595,6 +721,80 @@
             </button>
             <img src="" alt="Certificate Zoomed" id="lightboxImg">
             <div class="lightbox-caption" id="lightboxCaption">Sertifikat Penghargaan</div>
+        </div>
+    </div>
+
+    <!-- AstroBot Space Assistant (Chatbot FAQ) -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <!-- Trigger Button -->
+        <button class="chatbot-trigger" id="chatbotTrigger" onclick="toggleChatbot()" aria-label="Buka Asisten Virtual">
+            <i class="fa-solid fa-user-astronaut"></i>
+            <span class="chat-pulse-dot"></span>
+        </button>
+
+        <!-- Chat Window -->
+        <div class="chatbot-window glass-card" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="bot-info-header">
+                    <div class="bot-avatar-wrapper">
+                        <i class="fa-solid fa-user-astronaut"></i>
+                        <span class="online-indicator"></span>
+                    </div>
+                    <div>
+                        <h4>AstroBot</h4>
+                        <p>Virtual Assistant Fajar</p>
+                    </div>
+                </div>
+                <button class="chatbot-close-btn" onclick="toggleChatbot()" aria-label="Tutup Chatbot">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chat-message bot-msg">
+                    <p>Halo! 🧑‍🚀 Saya <strong>AstroBot</strong>, asisten virtual Fajar. Ada yang bisa saya bantu jelaskan tentang Fajar?</p>
+                </div>
+            </div>
+
+            <div class="chatbot-quick-replies" id="chatbotReplies">
+                <button class="reply-chip" onclick="askAstroBot('siapa')">Siapa Fajar?</button>
+                <button class="reply-chip" onclick="askAstroBot('skills')">Keahlian?</button>
+                <button class="reply-chip" onclick="askAstroBot('proyek')">Proyek Terkini?</button>
+                <button class="reply-chip" onclick="askAstroBot('kontak')">Cara Hubungi?</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Floating Widget -->
+    <div class="wa-widget-container" id="waWidget">
+        <!-- Trigger Button -->
+        <button class="wa-trigger" onclick="toggleWaPopup()" aria-label="Hubungi WhatsApp">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span class="wa-badge">1</span>
+        </button>
+
+        <!-- Mini Popup Box -->
+        <div class="wa-popup-box glass-card" id="waPopup">
+            <div class="wa-popup-header">
+                <i class="fa-brands fa-whatsapp"></i>
+                <div>
+                    <h4>Fajar Nur Farrijal</h4>
+                    <p>Online / Hubungi via Chat</p>
+                </div>
+            </div>
+            <div class="wa-popup-body">
+                <p class="wa-welcome-text">Halo! Ada yang bisa saya bantu? Silakan pilih atau ketik pesan Anda di bawah:</p>
+                <div class="wa-quick-messages">
+                    <button class="wa-quick-msg" onclick="sendWaMessage('Halo Fajar, saya tertarik untuk merekrut Anda!')">Tertarik Rekrut</button>
+                    <button class="wa-quick-msg" onclick="sendWaMessage('Halo Fajar, bisa bantu buatkan website/sistem?')">Jasa Pembuatan Web</button>
+                </div>
+                <div class="wa-input-row">
+                    <input type="text" id="waInputText" placeholder="Ketik pesan Anda..." onkeydown="handleWaKey(event)">
+                    <button class="wa-send-btn" onclick="triggerCustomWaMessage()" aria-label="Kirim ke WhatsApp">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 

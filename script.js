@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortfolioFilters();
     initTypewriter();
     initProjectCardEffects();
+    initGitHubStats();
+    initAnalyticsDashboard();
 });
 
 /* ==========================================================================
@@ -622,7 +624,7 @@ window.openCertLightbox = openCertLightbox;
 window.closeCertLightbox = closeCertLightbox;
 
 /* ==========================================================================
-   8. CONTACT FORM SIMULATION HANDLING
+   8. CONTACT FORM SUBMIT HANDLING (WEB3FORMS INTEGRATION)
    ========================================================================== */
 
 function handleFormSubmit(e) {
@@ -632,32 +634,83 @@ function handleFormSubmit(e) {
     const status = document.getElementById('formStatus');
     const submitBtn = form.querySelector('.btn-submit');
     
+    // Ambil token Web3Forms
+    const accessKeyInput = form.querySelector('input[name="access_key"]');
+    const accessKey = accessKeyInput ? accessKeyInput.value.trim() : '';
+    
     // Change button state to loading
     const originalBtnHTML = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Mengirim Pesan...';
     submitBtn.disabled = true;
     
-    // Simulate network delay for premium feel
-    setTimeout(() => {
-        status.className = "form-status success animate-init animate-play";
-        status.innerHTML = '<i class="fa-solid fa-circle-check"></i> Pesan terkirim! Terima kasih telah menghubungi Fajar. Pesan Anda akan dibalas sesegera mungkin.';
-        
-        // Reset form
-        form.reset();
-        
-        // Restore button state
-        submitBtn.innerHTML = originalBtnHTML;
-        submitBtn.disabled = false;
-        
-        // Auto scroll status into view
-        status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        
-        // Hide message after 7 seconds
+    // Jika masih menggunakan placeholder, jalankan simulasi agar tidak error
+    if (!accessKey || accessKey === 'YOUR_ACCESS_KEY_HERE') {
         setTimeout(() => {
-            status.style.display = 'none';
-        }, 7000);
+            status.className = "form-status success animate-init animate-play";
+            status.style.display = 'block';
+            status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Simulasi Sukses!</strong> Terima kasih telah menghubungi Fajar. Pesan Anda akan dibalas sesegera mungkin. <br><small style="opacity: 0.85;">(Catatan: Untuk pengiriman email asli, silakan ganti value access_key di index.html dengan key Web3Forms Anda)</small>';
+            
+            // Reset form
+            form.reset();
+            
+            // Restore button state
+            submitBtn.innerHTML = originalBtnHTML;
+            submitBtn.disabled = false;
+            
+            // Auto scroll status into view
+            status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Hide message after 8 seconds
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 8000);
+            
+        }, 1500);
+    } else {
+        // Pengiriman email asli ke Web3Forms API
+        const formData = new FormData(form);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
         
-    }, 1500);
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
+        })
+        .then(async (response) => {
+            let jsonRes = await response.json();
+            if (response.status == 200) {
+                status.className = "form-status success animate-init animate-play";
+                status.style.display = 'block';
+                status.innerHTML = '<i class="fa-solid fa-circle-check"></i> Pesan asli terkirim! Terima kasih telah menghubungi Fajar. Pesan Anda akan segera dibalas.';
+                form.reset();
+            } else {
+                status.className = "form-status error animate-init animate-play";
+                status.style.display = 'block';
+                status.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Gagal mengirim pesan: ${jsonRes.message || 'Terjadi kesalahan server.'}`;
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            status.className = "form-status error animate-init animate-play";
+            status.style.display = 'block';
+            status.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Terjadi kesalahan jaringan. Silakan periksa koneksi Anda dan coba lagi.';
+        })
+        .then(() => {
+            // Restore button state
+            submitBtn.innerHTML = originalBtnHTML;
+            submitBtn.disabled = false;
+            status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Hide message after 8 seconds
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 8000);
+        });
+    }
 }
 
 window.handleFormSubmit = handleFormSubmit;
@@ -701,23 +754,34 @@ function initThemeToggle() {
 }
 
 function updateChartTheme(isDark) {
-    if (!skillsChartInstance) return;
-    
-    const rScale = skillsChartInstance.options.scales.r;
-    
-    if (isDark) {
-        rScale.pointLabels.color = '#a4a7c6';
-        rScale.grid.color = 'rgba(255, 255, 255, 0.06)';
-        rScale.ticks.color = '#6b6e8d';
-        rScale.angleLines.color = 'rgba(255, 255, 255, 0.1)';
-    } else {
-        rScale.pointLabels.color = '#5a5d7c';
-        rScale.grid.color = 'rgba(108, 92, 231, 0.08)';
-        rScale.ticks.color = '#8e92bc';
-        rScale.angleLines.color = 'rgba(108, 92, 231, 0.15)';
+    if (skillsChartInstance) {
+        const rScale = skillsChartInstance.options.scales.r;
+        if (isDark) {
+            rScale.pointLabels.color = '#a4a7c6';
+            rScale.grid.color = 'rgba(255, 255, 255, 0.06)';
+            rScale.ticks.color = '#6b6e8d';
+            rScale.angleLines.color = 'rgba(255, 255, 255, 0.1)';
+        } else {
+            rScale.pointLabels.color = '#5a5d7c';
+            rScale.grid.color = 'rgba(108, 92, 231, 0.08)';
+            rScale.ticks.color = '#8e92bc';
+            rScale.angleLines.color = 'rgba(108, 92, 231, 0.15)';
+        }
+        skillsChartInstance.update();
     }
-    
-    skillsChartInstance.update();
+
+    if (window.analyticsChartInstance) {
+        const textColor = isDark ? '#a4a7c6' : '#5a5d7c';
+        const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(108, 92, 231, 0.06)';
+        
+        window.analyticsChartInstance.options.scales.x.ticks.color = textColor;
+        window.analyticsChartInstance.options.scales.x.grid.color = gridColor;
+        window.analyticsChartInstance.options.scales.y.ticks.color = textColor;
+        window.analyticsChartInstance.options.scales.y.grid.color = gridColor;
+        window.analyticsChartInstance.options.scales.y.title.color = textColor;
+        
+        window.analyticsChartInstance.update();
+    }
 }
 
 /* ==========================================================================
@@ -834,3 +898,492 @@ function openCvLightbox() {
 }
 
 window.openCvLightbox = openCvLightbox;
+
+/* ==========================================================================
+   13. INTERACTIVE JOURNEY TIMELINE LOGIC
+   ========================================================================== */
+
+const timelineData = {
+    '2023': {
+        title: "Mulai Pendidikan S1 Informatika",
+        desc: "Memulai perjalanan akademis di jurusan S1 Informatika. Mempelajari fundamental ilmu komputer, pemrograman dasar, algoritma & struktur data, serta mengeksplorasi minat mendalam pada rekayasa perangkat lunak dan analisis data.",
+        techs: ["S1 Informatika", "Fundamental CS", "Algoritma & Struktur Data"]
+    },
+    '2025': {
+        title: "Platform Karir Vie Roku & Juara Respective Fest Vol.1",
+        desc: "Membangun Vie Roku Management Career Platform (portal rekrutmen terpadu & membership). Pada tahun yang sama, berhasil menyabet gelar Juara Respective Fest Vol.1 di Universitas Brawijaya, memvalidasi skill kompetitif dan kerja sama tim dalam memecahkan masalah teknologi.",
+        techs: ["Job Portal", "PHP / MySQL", "Kompetisi UI/UX", "Problem Solving"]
+    },
+    '2026': {
+        title: "Sistem POS Yogya Fresh, Proyek ZA, & Smart ATS",
+        desc: "Tahun produktif dalam merancang solusi nyata: Yogya Fresh System Pro (Sistem Labeling & POS retail), portal hukum modern Proyek ZA (ZS Law Firm), Warung Kopi Pendopo (Web UMKM & WhatsApp Ordering), serta sedang menyelesaikan Smart ATS (Applicant Tracking System dengan AI screening).",
+        techs: ["Sistem POS", "Legal Tech", "Smart ATS", "Node.js & AI", "HTML/CSS/JS"]
+    },
+    '2027': {
+        title: "Kelulusan S1 Informatika & Karir Profesional",
+        desc: "Target kelulusan studi sarjana S1 Informatika dengan portofolio yang matang. Berfokus penuh untuk berkarir secara profesional sebagai Full-Stack Web Developer atau Data Analyst yang siap memberikan dampak positif lewat solusi perangkat lunak bernilai tinggi.",
+        techs: ["Kelulusan S1", "Software Engineer", "Data Analyst", "Professional Career"]
+    }
+};
+
+function selectTimelineYear(year) {
+    const data = timelineData[year];
+    if (!data) return;
+
+    const nodes = document.querySelectorAll('.timeline-node');
+    const card = document.getElementById('timelineDetailCard');
+    const yearBadge = document.getElementById('timelineYearBadge');
+    const title = document.getElementById('timelineDetailTitle');
+    const desc = document.getElementById('timelineDetailDesc');
+    const techsContainer = document.getElementById('timelineDetailTechs');
+
+    if (!card || !yearBadge || !title || !desc || !techsContainer) return;
+
+    // Update active node state
+    nodes.forEach(node => {
+        if (node.getAttribute('data-year') === year) {
+            node.classList.add('active');
+        } else {
+            node.classList.remove('active');
+        }
+    });
+
+    // Add animating fade-out effect
+    card.classList.add('animating');
+
+    setTimeout(() => {
+        // Update content
+        yearBadge.textContent = year;
+        title.textContent = data.title;
+        desc.textContent = data.desc;
+
+        // Update tech tags
+        techsContainer.innerHTML = '';
+        data.techs.forEach(tech => {
+            const span = document.createElement('span');
+            span.textContent = tech;
+            techsContainer.appendChild(span);
+        });
+
+        // Fade-in animated card
+        card.classList.remove('animating');
+    }, 250);
+}
+
+// Export to window
+window.selectTimelineYear = selectTimelineYear;
+
+/* ==========================================================================
+   14. GITHUB API LIVE STATS & DATA ANALYSIS DASHBOARD LOGIC
+   ========================================================================== */
+
+function showGitHubFallback() {
+    const loading = document.getElementById('githubLoading');
+    const content = document.getElementById('githubProfile');
+    if (!loading || !content) return;
+    
+    // Set fallback data
+    document.getElementById('ghAvatar').src = 'public/images/profile.jpg';
+    document.getElementById('ghName').textContent = 'Fajar Nur Farrijal';
+    document.getElementById('ghBio').textContent = 'Mahasiswa Teknik Informatika | Web Developer & Data Analyst';
+    document.getElementById('ghLink').href = 'https://github.com/Fajarrr124314';
+    document.getElementById('ghRepos').textContent = '12';
+    document.getElementById('ghFollowers').textContent = '10+';
+    
+    // Repos
+    const reposList = document.getElementById('ghReposList');
+    reposList.innerHTML = `
+        <li>
+            <a href="https://github.com/Fajarrr124314/smart-ats" target="_blank" class="gh-repo-link"><i class="fa-solid fa-folder-open"></i> smart-ats</a>
+            <div class="gh-repo-meta">
+                <span><span class="lang-dot" style="background-color: #f1e05a;"></span> JavaScript</span>
+                <span><i class="fa-regular fa-star"></i> 1</span>
+            </div>
+        </li>
+        <li>
+            <a href="https://github.com/Fajarrr124314/zslawfirm" target="_blank" class="gh-repo-link"><i class="fa-solid fa-folder-open"></i> zslawfirm</a>
+            <div class="gh-repo-meta">
+                <span><span class="lang-dot" style="background-color: #563d7c;"></span> CSS</span>
+                <span><i class="fa-regular fa-star"></i> 1</span>
+            </div>
+        </li>
+        <li>
+            <a href="https://github.com/Fajarrr124314/warkop-pendopo" target="_blank" class="gh-repo-link"><i class="fa-solid fa-folder-open"></i> warkop-pendopo</a>
+            <div class="gh-repo-meta">
+                <span><span class="lang-dot" style="background-color: #e34c26;"></span> HTML</span>
+                <span><i class="fa-regular fa-star"></i> 0</span>
+            </div>
+        </li>
+    `;
+    
+    loading.style.display = 'none';
+    content.style.display = 'block';
+}
+
+function initGitHubStats() {
+    const loading = document.getElementById('githubLoading');
+    const content = document.getElementById('githubProfile');
+    if (!loading || !content) return;
+    
+    const username = 'Fajarrr124314';
+    
+    // Fetch profile info
+    fetch(`https://api.github.com/users/${username}`)
+        .then(res => {
+            if (!res.ok) throw new Error('API Rate Limit or Error');
+            return res.json();
+        })
+        .then(profile => {
+            document.getElementById('ghAvatar').src = profile.avatar_url;
+            document.getElementById('ghName').textContent = profile.name || username;
+            document.getElementById('ghBio').textContent = profile.bio || 'Web Developer & Data Analyst';
+            document.getElementById('ghLink').href = profile.html_url;
+            document.getElementById('ghRepos').textContent = profile.public_repos;
+            document.getElementById('ghFollowers').textContent = profile.followers;
+            
+            // Fetch repos
+            return fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
+        })
+        .then(res => {
+            if (!res.ok) throw new Error('API Repos Error');
+            return res.json();
+        })
+        .then(repos => {
+            const reposList = document.getElementById('ghReposList');
+            reposList.innerHTML = '';
+            
+            // Filter out forks or just take the first 3
+            const mainRepos = repos.filter(r => !r.fork).slice(0, 3);
+            
+            // Language colors mapping
+            const langColors = {
+                'JavaScript': '#f1e05a',
+                'HTML': '#e34c26',
+                'CSS': '#563d7c',
+                'PHP': '#4f5d95',
+                'Python': '#3572A5',
+                'TypeScript': '#3178c6'
+            };
+            
+            if (mainRepos.length === 0) {
+                // If no public own repos, take first 3 repos in general
+                repos.slice(0, 3).forEach(repo => addRepoToList(repo));
+            } else {
+                mainRepos.forEach(repo => addRepoToList(repo));
+            }
+            
+            function addRepoToList(repo) {
+                const li = document.createElement('li');
+                const lang = repo.language || 'HTML';
+                const color = langColors[lang] || '#8e92bc';
+                
+                li.innerHTML = `
+                    <a href="${repo.html_url}" target="_blank" class="gh-repo-link">
+                        <i class="fa-solid fa-folder-open"></i> ${repo.name}
+                    </a>
+                    <div class="gh-repo-meta">
+                        <span><span class="lang-dot" style="background-color: ${color};"></span> ${lang}</span>
+                        <span><i class="fa-regular fa-star"></i> ${repo.stargazers_count}</span>
+                    </div>
+                `;
+                reposList.appendChild(li);
+            }
+            
+            loading.style.display = 'none';
+            content.style.display = 'block';
+        })
+        .catch(err => {
+            console.warn('GitHub API fetch failed. Using fallback.', err);
+            showGitHubFallback();
+        });
+}
+
+// Analytics Dashboard Data & Logic
+const analyticsData = {
+    all: {
+        projects: "5",
+        hours: "320+",
+        languages: "HTML, PHP, JS, SQL",
+        values: [90, 85, 80, 75, 60]
+    },
+    web: {
+        projects: "3",
+        hours: "200+",
+        languages: "HTML, CSS, JS, PHP",
+        values: [95, 88, 82, 70, 20]
+    },
+    data: {
+        projects: "2",
+        hours: "120+",
+        languages: "SQL, Python, Excel",
+        values: [40, 30, 20, 85, 90]
+    }
+};
+
+function initAnalyticsDashboard() {
+    const canvas = document.getElementById('analyticsChart');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const isDark = document.body.classList.contains('dark-theme');
+    
+    const textColor = isDark ? '#a4a7c6' : '#5a5d7c';
+    const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(108, 92, 231, 0.06)';
+    
+    const data = {
+        labels: ["HTML/CSS", "JavaScript", "PHP", "SQL / DB", "Python / Data"],
+        datasets: [{
+            label: 'Tingkat Penggunaan / Keahlian (%)',
+            data: analyticsData.all.values,
+            backgroundColor: [
+                'rgba(108, 92, 231, 0.75)', // Accent purple
+                'rgba(0, 206, 201, 0.75)',  // Accent cyan
+                'rgba(253, 121, 168, 0.75)', // Pink
+                'rgba(9, 132, 227, 0.75)',  // Blue
+                'rgba(225, 112, 85, 0.75)'  // Orange
+            ],
+            borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+            borderWidth: 1,
+            borderRadius: 6
+        }]
+    };
+    
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(25, 25, 50, 0.85)',
+                    titleFont: { family: 'Space Grotesk', size: 12 },
+                    bodyFont: { family: 'Outfit', size: 12 },
+                    padding: 10,
+                    cornerRadius: 8
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        color: gridColor
+                    },
+                    ticks: {
+                        color: textColor,
+                        font: { family: 'Space Grotesk', size: 10, weight: '600' }
+                    }
+                },
+                y: {
+                    grid: {
+                        color: gridColor
+                    },
+                    ticks: {
+                        color: textColor,
+                        font: { family: 'Outfit', size: 10 },
+                        stepSize: 20
+                    },
+                    min: 0,
+                    max: 100
+                }
+            }
+        }
+    };
+    
+    window.analyticsChartInstance = new Chart(ctx, config);
+}
+
+function updateAnalyticsDashboard(category) {
+    const data = analyticsData[category];
+    if (!data) return;
+    
+    // Update metric numbers with slight fade effect
+    const elements = {
+        projects: document.getElementById('metricProjects'),
+        hours: document.getElementById('metricHours'),
+        languages: document.getElementById('metricLanguages')
+    };
+    
+    Object.keys(elements).forEach(key => {
+        const el = elements[key];
+        if (el) {
+            el.style.opacity = '0';
+            setTimeout(() => {
+                if (key === 'projects') el.textContent = data.projects;
+                if (key === 'hours') el.textContent = data.hours;
+                if (key === 'languages') el.textContent = data.languages;
+                el.style.opacity = '1';
+            }, 200);
+        }
+    });
+    
+    // Update Chart
+    if (window.analyticsChartInstance) {
+        window.analyticsChartInstance.data.datasets[0].data = data.values;
+        window.analyticsChartInstance.update();
+    }
+}
+
+// Export to window
+window.initGitHubStats = initGitHubStats;
+window.initAnalyticsDashboard = initAnalyticsDashboard;
+window.updateAnalyticsDashboard = updateAnalyticsDashboard;
+
+/* ==========================================================================
+   15. ASTROBOT VIRUTAL ASSISTANT (CHATBOT FAQ) LOGIC
+   ========================================================================== */
+
+function toggleChatbot() {
+    const chatWindow = document.getElementById('chatbotWindow');
+    if (!chatWindow) return;
+    
+    chatWindow.classList.toggle('active');
+    
+    // Auto scroll to bottom when opened
+    if (chatWindow.classList.contains('active')) {
+        const msgContainer = document.getElementById('chatbotMessages');
+        if (msgContainer) {
+            setTimeout(() => {
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            }, 100);
+        }
+    }
+}
+
+const botReplies = {
+    siapa: "Fajar Nur Farrijal adalah Mahasiswa S1 Informatika yang berfokus pada Full-Stack Web Development, Data Analytics, dan Desain UI/UX. Fajar memiliki hasrat besar untuk memecahkan masalah kompleks lewat baris kode yang efisien dan estetika visual yang premium.",
+    skills: "Berikut adalah keahlian utama Fajar:<br><br>🛸 <strong>Frontend:</strong> HTML5, CSS3, JavaScript (ES6+), Tailwind CSS, Bootstrap<br>🌌 <strong>Backend:</strong> PHP, Node.js, RESTful API<br>🛰️ <strong>Database:</strong> MySQL / SQL<br>📊 <strong>Lainnya:</strong> Data Visualization, Dashboard Analytics, Sistem ATS & POS",
+    proyek: "Fajar telah mengerjakan berbagai proyek menarik:<br><br>1. 🚀 <strong>Smart ATS:</strong> Portal HR dengan penyaringan CV otomatis menggunakan AI.<br>2. 🛒 <strong>Yogya Fresh Pro:</strong> Sistem POS retail dengan label barcode pencetakan harga.<br>3. ⚖️ <strong>ZS Law Firm:</strong> Portal hukum digital premium dengan toggle mode Gelap/Terang.<br>4. ☕ <strong>Warkop Pendopo:</strong> Website reservasi tempat kopi UMKM dengan WhatsApp ordering.",
+    kontak: "Anda bisa menghubungi Fajar dengan cepat melalui:<br><br>📱 <strong>WhatsApp:</strong> 0895806317711<br>✉️ <strong>Email:</strong> fajarnf77@gmail.com<br>🔗 <strong>LinkedIn:</strong> <a href='https://www.linkedin.com/in/fajar-nur-farrijal-448644255/' target='_blank' style='color:var(--accent); font-weight:700; text-decoration:none;'>Fajar Nur Farrijal</a><br><br>Atau silakan isi <strong>Form Kontak</strong> di bawah untuk mengirim pesan langsung!"
+};
+
+let isBotTyping = false;
+
+function askAstroBot(topic) {
+    if (isBotTyping) return;
+    
+    const msgContainer = document.getElementById('chatbotMessages');
+    const repliesContainer = document.getElementById('chatbotReplies');
+    if (!msgContainer || !repliesContainer) return;
+    
+    // User message mapping for UI display
+    const topicQuestions = {
+        siapa: "Siapa Fajar?",
+        skills: "Apa saja keahliannya?",
+        proyek: "Apa saja proyek terbarunya?",
+        kontak: "Bagaimana cara menghubunginya?"
+    };
+    
+    const userText = topicQuestions[topic] || "Tanya sesuatu...";
+    
+    // 1. Add User Message
+    const userMsgDiv = document.createElement('div');
+    userMsgDiv.className = "chat-message user-msg";
+    userMsgDiv.innerHTML = `<p>${userText}</p>`;
+    msgContainer.appendChild(userMsgDiv);
+    
+    // Scroll to bottom
+    msgContainer.scrollTop = msgContainer.scrollHeight;
+    
+    // Disable replies during typing
+    const chips = repliesContainer.querySelectorAll('.reply-chip');
+    chips.forEach(chip => chip.disabled = true);
+    isBotTyping = true;
+    
+    // 2. Show Typing Indicator
+    setTimeout(() => {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = "typing-indicator";
+        typingDiv.id = "typingIndicator";
+        typingDiv.innerHTML = `
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+        `;
+        msgContainer.appendChild(typingDiv);
+        msgContainer.scrollTop = msgContainer.scrollHeight;
+        
+        // 3. Add Bot Response after typing delay
+        setTimeout(() => {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+            
+            const botMsgDiv = document.createElement('div');
+            botMsgDiv.className = "chat-message bot-msg";
+            botMsgDiv.innerHTML = `<p>${botReplies[topic] || 'Maaf, saya tidak mengerti pertanyaan tersebut.'}</p>`;
+            msgContainer.appendChild(botMsgDiv);
+            
+            // Scroll to bottom
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+            
+            // Re-enable replies
+            chips.forEach(chip => chip.disabled = false);
+            isBotTyping = false;
+        }, 1200);
+        
+    }, 400);
+}
+
+// Export to window
+window.toggleChatbot = toggleChatbot;
+window.askAstroBot = askAstroBot;
+
+/* ==========================================================================
+   16. WHATSAPP FLOATING WIDGET LOGIC
+   ========================================================================== */
+
+function toggleWaPopup() {
+    const waPopup = document.getElementById('waPopup');
+    if (!waPopup) return;
+    
+    waPopup.classList.toggle('active');
+    
+    // Hide notification badge when opened
+    const badge = document.querySelector('.wa-badge');
+    if (badge && waPopup.classList.contains('active')) {
+        badge.style.display = 'none';
+    }
+}
+
+function sendWaMessage(text) {
+    if (!text || text.trim() === "") return;
+    
+    const phoneNumber = "62895806317711";
+    const encodedText = encodeURIComponent(text);
+    const waUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
+    
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+}
+
+function triggerCustomWaMessage() {
+    const input = document.getElementById('waInputText');
+    if (!input) return;
+    
+    const text = input.value.trim();
+    if (text === "") return;
+    
+    sendWaMessage(text);
+    input.value = ""; // Clear input
+}
+
+function handleWaKey(e) {
+    if (e.key === 'Enter') {
+        triggerCustomWaMessage();
+    }
+}
+
+// Setup periodically shake widget to catch recruiter's attention
+setInterval(() => {
+    const trigger = document.querySelector('.wa-trigger');
+    if (trigger && !document.getElementById('waPopup').classList.contains('active')) {
+        trigger.classList.add('shake-animation');
+        setTimeout(() => trigger.classList.remove('shake-animation'), 1000);
+    }
+}, 12000);
+
+// Export to window
+window.toggleWaPopup = toggleWaPopup;
+window.sendWaMessage = sendWaMessage;
+window.triggerCustomWaMessage = triggerCustomWaMessage;
+window.handleWaKey = handleWaKey;
