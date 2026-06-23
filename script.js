@@ -29,35 +29,42 @@ function initNavbar() {
     const navMenu = document.getElementById('navMenu');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Header scroll background change
+    // Header scroll background change (passive event listener for better performance)
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
+    }, { passive: true });
 
-        // Dynamic link activation on scroll
-        let currentSectionId = '';
-        const sections = document.querySelectorAll('section');
-        const scrollPosition = window.scrollY + 150;
+    // Dynamic link activation using IntersectionObserver (highly optimized, prevents layout thrashing)
+    const sections = document.querySelectorAll('section');
+    const observerOptions = {
+        root: null,
+        rootMargin: '-30% 0px -50% 0px',
+        threshold: 0
+    };
 
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                currentSectionId = section.getAttribute('id');
+    const navObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const currentSectionId = entry.target.getAttribute('id');
+                if (currentSectionId) {
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('href') === `#${currentSectionId}`) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
             }
         });
+    }, observerOptions);
 
-        if (currentSectionId) {
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${currentSectionId}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
+    sections.forEach(section => {
+        navObserver.observe(section);
     });
 
     // Toggle Mobile Menu
@@ -307,10 +314,10 @@ const projectData = {
         category: "Web UMKM & Landing Page",
         description: "Warung Kopi Pendopo adalah sebuah platform digital (landing page) yang didesain khusus untuk mendukung digitalisasi UMKM kedai kopi tradisional di Telagasari, Karawang. Platform ini menyajikan perpaduan estetika tradisional dan modern, memudahkan pelanggan melihat menu andalan, suasana tempat, serta melakukan reservasi secara langsung.",
         images: [
-            "public/images/project kopi 1.png",
-            "public/images/project kopi 2.png",
-            "public/images/project kopi 3.png",
-            "public/images/project kopi 4.png"
+            "public/images/project kopi 1.webp",
+            "public/images/project kopi 2.webp",
+            "public/images/project kopi 3.webp",
+            "public/images/project kopi 4.webp"
         ],
         features: [
             "WhatsApp Ordering Integration: Memudahkan pemesanan menu makanan/minuman secara langsung ke admin warkop.",
@@ -328,9 +335,9 @@ const projectData = {
         category: "Sistem POS & Retail Labeling",
         description: "Yogya Fresh System Pro adalah sistem portal administrator berbasis web yang dirancang khusus untuk mengelola data harga, informasi kualitas, dan cetak label produk segar (seperti daging, sayur, buah, dan ikan) di Yogya Supermarket. Sistem ini membantu menyelaraskan data harga gudang dengan label fisik secara real-time.",
         images: [
-            "public/images/project pos 1.png",
-            "public/images/project pos 2.png",
-            "public/images/project pos 3.png"
+            "public/images/project pos 1.webp",
+            "public/images/project pos 2.webp",
+            "public/images/project pos 3.webp"
         ],
         features: [
             "Secure Access Portal: Login terenkripsi khusus untuk staf administrator and operator retail.",
@@ -348,9 +355,9 @@ const projectData = {
         category: "Sistem Rekrutmen & Pelatihan",
         description: "Vie Roku Management Careers Portal adalah platform pencarian kerja terpadu dan manajemen pelatihan profesional. Platform ini dikembangkan untuk memfasilitasi pencari kerja dalam menemukan lowongan, mendaftar ke komunitas member, serta mengikuti program peningkatan karir (training class).",
         images: [
-            "public/images/project rekrut 1.png",
-            "public/images/project rekrut 2.png",
-            "public/images/project rekrut 3.png"
+            "public/images/project rekrut 1.webp",
+            "public/images/project rekrut 2.webp",
+            "public/images/project rekrut 3.webp"
         ],
         features: [
             "Job Vacancy Directory: Antarmuka filter pencarian lowongan kerja berdasarkan posisi dan keahlian.",
@@ -368,11 +375,11 @@ const projectData = {
         category: "Portal Hukum (Legal Tech)",
         description: "ZS Law Firm & Associate Digital Portal (berlabel 'Future Legal') merupakan platform teknologi hukum (Legal Tech) modern yang menyatukan klien dengan pengacara profesional secara virtual. Melalui portal ini, klien dapat melakukan konsultasi hukum, membuat janji temu, serta mengelola dokumen hukum.",
         images: [
-            "public/images/legal 1.png",
-            "public/images/legal 2.png",
-            "public/images/legal 3.png",
-            "public/images/legal 4.png",
-            "public/images/legal 5.png"
+            "public/images/legal 1.webp",
+            "public/images/legal 2.webp",
+            "public/images/legal 3.webp",
+            "public/images/legal 4.webp",
+            "public/images/legal 5.webp"
         ],
         features: [
             "Online Case Case Consultation Form: Memudahkan klien mengajukan analisis awal kasus hukum mereka.",
@@ -390,16 +397,16 @@ const projectData = {
         category: "Sistem ATS (Ongoing Project)",
         description: "Smart ATS (Applicant Tracking System) Portal adalah aplikasi web HR tingkat lanjut untuk PT Indonesia. Dilengkapi fitur AI Smart Screening untuk menyaring berkas CV pelamar secara otomatis. HRD dapat memantau pergerakan pelamar kerja melalui pipeline visual papan Kanban yang interaktif.",
         images: [
-            "public/images/kategori sedang dikerjakan 1.png",
-            "public/images/kategori sedang dikerjakan 2.png",
-            "public/images/kategori sedang dikerjakan 3.png",
-            "public/images/kategori sedang dikerjakan 4.png",
-            "public/images/kategori sedang dikerjakan 5.png",
-            "public/images/kategori sedang dikerjakan 6.png",
-            "public/images/kategori sedang dikerjakan 7.png",
-            "public/images/kategori sedang dikerjakan 8.png",
-            "public/images/kategori sedang dikerjakan 9.png",
-            "public/images/kategori sedang dikerjakan 10.png"
+            "public/images/kategori sedang dikerjakan 1.webp",
+            "public/images/kategori sedang dikerjakan 2.webp",
+            "public/images/kategori sedang dikerjakan 3.webp",
+            "public/images/kategori sedang dikerjakan 4.webp",
+            "public/images/kategori sedang dikerjakan 5.webp",
+            "public/images/kategori sedang dikerjakan 6.webp",
+            "public/images/kategori sedang dikerjakan 7.webp",
+            "public/images/kategori sedang dikerjakan 8.webp",
+            "public/images/kategori sedang dikerjakan 9.webp",
+            "public/images/kategori sedang dikerjakan 10.webp"
         ],
         features: [
             "AI Smart Screening & Matching: Secara otomatis menghitung persentase kecocokan CV pelamar dengan kualifikasi pekerjaan.",
@@ -413,6 +420,7 @@ const projectData = {
         repoLink: "https://github.com/Fajarrr124314/smart-ats"
     }
 };
+
 
 let currentProjectKey = '';
 let activeSlideIndex = 0;
@@ -584,11 +592,11 @@ window.closeProjectModal = closeProjectModal;
 
 const certificateData = [
     {
-        src: "public/images/Sertifikat Juara Respective Fest Vol.1 - Universitas Brawijaya_page-0001.jpg",
+        src: "public/images/Sertifikat Juara Respective Fest Vol.1 - Universitas Brawijaya_page-0001.webp",
         caption: "Juara Respective Fest Vol.1 - Universitas Brawijaya (Halaman Utama)"
     },
     {
-        src: "public/images/2Sertifikat Juara Respective Fest Vol.1 - Universitas Brawijaya (1)_page-0001.jpg",
+        src: "public/images/2Sertifikat Juara Respective Fest Vol.1 - Universitas Brawijaya (1)_page-0001.webp",
         caption: "Sertifikat Penghargaan Respective Fest Vol.1 - Universitas Brawijaya (Halaman Lampiran)"
     }
 ];
@@ -891,7 +899,7 @@ function openCvLightbox() {
     const caption = document.getElementById('lightboxCaption');
     if (!lightbox || !img || !caption) return;
 
-    img.src = "public/images/CV_FAJARNF_UPDATE_page-0001.jpg";
+    img.src = "public/images/CV_FajarNF_New.webp";
     caption.textContent = "Curriculum Vitae - Fajar Nur Farrijal";
 
     lightbox.classList.add('active');
@@ -987,7 +995,7 @@ function showGitHubFallback() {
     if (!loading || !content) return;
 
     // Set fallback data
-    document.getElementById('ghAvatar').src = 'public/images/profile.jpg';
+    document.getElementById('ghAvatar').src = 'public/images/photos.webp';
     document.getElementById('ghName').textContent = 'Fajar Nur Farrijal';
     document.getElementById('ghBio').textContent = 'Mahasiswa Teknik Informatika | Web Developer & Data Analyst';
     document.getElementById('ghLink').href = 'https://github.com/Fajarrr124314';
@@ -1545,7 +1553,7 @@ function showNasaFallback() {
     const content = document.getElementById('nasaContent');
     if (!loading || !content) return;
 
-    document.getElementById('nasaImg').src = "public/images/project kopi 1.png"; // Fallback to an existing local space/nice image or custom url
+    document.getElementById('nasaImg').src = "public/images/project kopi 1.webp"; // Fallback to an existing local space/nice image or custom url
     // Let's use a beautiful public unsplash space image to make it look real!
     document.getElementById('nasaImg').src = "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=600&auto=format&fit=crop";
     document.getElementById('nasaTitle').textContent = "Pillars of Creation (James Webb Space Telescope)";
@@ -1688,6 +1696,8 @@ function init3DTagCloud() {
     }
 
     // Update and draw loop
+    let animationFrameId = null;
+
     function update() {
         let currentSpeedX = speedX;
         let currentSpeedY = speedY;
@@ -1748,7 +1758,7 @@ function init3DTagCloud() {
             ctx.restore();
         });
 
-        requestAnimationFrame(update);
+        animationFrameId = requestAnimationFrame(update);
     }
 
     function getMousePos(e) {
@@ -1802,7 +1812,23 @@ function init3DTagCloud() {
         }
     });
 
-    update();
+    // Start/stop animation loop based on visibility (crucial for mobile performance)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (!animationFrameId) {
+                    update();
+                }
+            } else {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+            }
+        });
+    }, { threshold: 0.05 });
+
+    observer.observe(canvas);
 }
 
 window.init3DTagCloud = init3DTagCloud;
