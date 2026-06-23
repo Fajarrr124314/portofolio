@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initProjectCardEffects();
     initGitHubStats();
     initAnalyticsDashboard();
+    initAccentPicker();
+    initGeoGreeting();
+    fetchNasaApod();
+    init3DTagCloud();
 });
 
 /* ==========================================================================
@@ -1255,7 +1259,8 @@ const botReplies = {
     siapa: "Fajar Nur Farrijal adalah Mahasiswa S1 Informatika yang berfokus pada Full-Stack Web Development, Data Analytics, dan Desain UI/UX. Fajar memiliki hasrat besar untuk memecahkan masalah kompleks lewat baris kode yang efisien dan estetika visual yang premium.",
     skills: "Berikut adalah keahlian utama Fajar:<br><br>🛸 <strong>Frontend:</strong> HTML5, CSS3, JavaScript (ES6+), Tailwind CSS, Bootstrap<br>🌌 <strong>Backend:</strong> PHP, Node.js, RESTful API<br>🛰️ <strong>Database:</strong> MySQL / SQL<br>📊 <strong>Lainnya:</strong> Data Visualization, Dashboard Analytics, Sistem ATS & POS",
     proyek: "Fajar telah mengerjakan berbagai proyek menarik:<br><br>1. 🚀 <strong>Smart ATS:</strong> Portal HR dengan penyaringan CV otomatis menggunakan AI.<br>2. 🛒 <strong>Yogya Fresh Pro:</strong> Sistem POS retail dengan label barcode pencetakan harga.<br>3. ⚖️ <strong>ZS Law Firm:</strong> Portal hukum digital premium dengan toggle mode Gelap/Terang.<br>4. ☕ <strong>Warkop Pendopo:</strong> Website reservasi tempat kopi UMKM dengan WhatsApp ordering.",
-    kontak: "Anda bisa menghubungi Fajar dengan cepat melalui:<br><br>📱 <strong>WhatsApp:</strong> 0895806317711<br>✉️ <strong>Email:</strong> fajarnf77@gmail.com<br>🔗 <strong>LinkedIn:</strong> <a href='https://www.linkedin.com/in/fajar-nur-farrijal-448644255/' target='_blank' style='color:var(--accent); font-weight:700; text-decoration:none;'>Fajar Nur Farrijal</a><br><br>Atau silakan isi <strong>Form Kontak</strong> di bawah untuk mengirim pesan langsung!"
+    kontak: "Anda bisa menghubungi Fajar dengan cepat melalui:<br><br>📱 <strong>WhatsApp:</strong> 0895806317711<br>✉️ <strong>Email:</strong> fajarnf77@gmail.com<br>🔗 <strong>LinkedIn:</strong> <a href='https://www.linkedin.com/in/fajar-nur-farrijal-448644255/' target='_blank' style='color:var(--accent); font-weight:700; text-decoration:none;'>Fajar Nur Farrijal</a><br><br>Atau silakan isi <strong>Form Kontak</strong> di bawah untuk mengirim pesan langsung!",
+    game: "Wah, Anda menemukan Easter Egg! 🎮 Klik tombol di bawah ini untuk bermain <strong>Astro-Jump</strong>:<br><br><button onclick='openGameModal(); toggleChatbot();' class='btn btn-primary btn-sm' style='padding:6px 12px; font-size:0.85rem;'><i class='fa-solid fa-gamepad'></i> Main Astro-Jump</button>"
 };
 
 let isBotTyping = false;
@@ -1272,7 +1277,8 @@ function askAstroBot(topic) {
         siapa: "Siapa Fajar?",
         skills: "Apa saja keahliannya?",
         proyek: "Apa saja proyek terbarunya?",
-        kontak: "Bagaimana cara menghubunginya?"
+        kontak: "Bagaimana cara menghubunginya?",
+        game: "Main Game? 🎮"
     };
 
     const userText = topicQuestions[topic] || "Tanya sesuatu...";
@@ -1387,3 +1393,843 @@ window.toggleWaPopup = toggleWaPopup;
 window.sendWaMessage = sendWaMessage;
 window.triggerCustomWaMessage = triggerCustomWaMessage;
 window.handleWaKey = handleWaKey;
+
+/* ==========================================================================
+   17. COLOR ACCENT PICKER LOGIC
+   ========================================================================== */
+
+function initAccentPicker() {
+    const toggleBtn = document.getElementById('accentPickerToggle');
+    const dropdown = document.getElementById('accentDropdown');
+
+    if (!toggleBtn || !dropdown) return;
+
+    // Toggle dropdown
+    toggleBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('active');
+    });
+
+    // Close dropdown on clicking outside
+    document.addEventListener('click', () => {
+        dropdown.classList.remove('active');
+    });
+
+    dropdown.addEventListener('click', (e) => {
+        e.stopPropagation();
+    });
+
+    // Restore saved accent color
+    const savedColor = localStorage.getItem('accent-color');
+    const savedRgb = localStorage.getItem('accent-rgb');
+    const savedName = localStorage.getItem('accent-name') || 'purple';
+
+    if (savedColor && savedRgb) {
+        setAccentColor(savedColor, savedRgb, savedName);
+    }
+}
+
+function setAccentColor(colorHex, colorRgb, name) {
+    // 1. Set CSS custom properties
+    document.documentElement.style.setProperty('--accent', colorHex);
+    document.documentElement.style.setProperty('--accent-rgb', colorRgb);
+
+    // 2. Mark active button in UI
+    const options = document.querySelectorAll('.accent-opt');
+    options.forEach(opt => {
+        if (opt.classList.contains(`color-${name}`)) {
+            opt.classList.add('active');
+        } else {
+            opt.classList.remove('active');
+        }
+    });
+
+    // 3. Save selection
+    localStorage.setItem('accent-color', colorHex);
+    localStorage.setItem('accent-rgb', colorRgb);
+    localStorage.setItem('accent-name', name);
+
+    // 4. Update Chart.js Radar Colors dynamically
+    if (window.skillsChartInstance) {
+        window.skillsChartInstance.data.datasets[0].backgroundColor = `rgba(${colorRgb}, 0.2)`;
+        window.skillsChartInstance.data.datasets[0].borderColor = `rgba(${colorRgb}, 0.8)`;
+        window.skillsChartInstance.data.datasets[0].pointHoverBorderColor = colorHex;
+        window.skillsChartInstance.update();
+    }
+
+    // 5. Update Chart.js Analytics Bar Colors dynamically
+    if (window.analyticsChartInstance) {
+        window.analyticsChartInstance.data.datasets[0].backgroundColor[0] = `rgba(${colorRgb}, 0.75)`;
+        window.analyticsChartInstance.update();
+    }
+}
+
+window.initAccentPicker = initAccentPicker;
+window.setAccentColor = setAccentColor;
+
+/* ==========================================================================
+   18. GEOLOCATION & WEATHER WELCOMING CARD LOGIC
+   ========================================================================== */
+
+function initGeoGreeting() {
+    const greetingEl = document.getElementById('geoGreetingText');
+    const greetingCard = document.getElementById('geoGreeting');
+    if (!greetingEl) return;
+
+    // Fallback message
+    const setFallbackGreeting = () => {
+        greetingEl.innerHTML = "Halo penjelajah antariksa! Selamat datang di ruang portofolio Fajar. Selamat menjelajahi proyek-proyek saya!";
+        const dot = document.querySelector('.geo-status-dot');
+        if (dot) dot.style.backgroundColor = "var(--accent)";
+    };
+
+    // Get client IP Geolocation info
+    fetch('https://ipapi.co/json/')
+        .then(response => {
+            if (!response.ok) throw new Error('IP API failed');
+            return response.json();
+        })
+        .then(locData => {
+            const city = locData.city || '';
+            const country = locData.country_name || '';
+            const lat = locData.latitude;
+            const lon = locData.longitude;
+
+            if (!lat || !lon) {
+                setFallbackGreeting();
+                return;
+            }
+
+            // Get weather from Open-Meteo
+            return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`)
+                .then(res => {
+                    if (!res.ok) throw new Error('Weather API failed');
+                    return res.json();
+                })
+                .then(weatherData => {
+                    const temp = Math.round(weatherData.current_weather.temperature);
+                    const code = weatherData.current_weather.weathercode;
+
+                    // Map weather code to description and icon
+                    // Code mapping from Open-Meteo
+                    let weatherDesc = "Cerah";
+                    let icon = "☀️";
+
+                    if (code === 0) { weatherDesc = "Cerah"; icon = "☀️"; }
+                    else if (code >= 1 && code <= 3) { weatherDesc = "Berawan Sebagian"; icon = "⛅"; }
+                    else if (code === 45 || code === 48) { weatherDesc = "Berkabut"; icon = "🌫️"; }
+                    else if (code >= 51 && code <= 67) { weatherDesc = "Hujan Gerimis"; icon = "🌧️"; }
+                    else if (code >= 71 && code <= 86) { weatherDesc = "Bersalju"; icon = "❄️"; }
+                    else if (code >= 95 && code <= 99) { weatherDesc = "Badai Petir"; icon = "⛈️"; }
+                    else { weatherDesc = "Hujan Sedang"; icon = "🌧️"; }
+
+                    // Format beautiful message
+                    let locationStr = city ? `${city}, ${country}` : country;
+                    greetingEl.innerHTML = `Halo pengunjung dari <strong>${locationStr}</strong>! Saat ini cuaca di sana sedang <strong>${weatherDesc} ${icon}</strong> dengan suhu <strong>${temp}°C</strong>. Selamat menjelajahi portofolio saya!`;
+                });
+        })
+        .catch(err => {
+            console.warn('Geolocation greeting failed. Using fallback.', err);
+            setFallbackGreeting();
+        });
+}
+
+window.initGeoGreeting = initGeoGreeting;
+
+/* ==========================================================================
+   19. NASA APOD (ASTRONOMY PICTURE OF THE DAY) WIDGET LOGIC
+   ========================================================================== */
+
+function showNasaFallback() {
+    const loading = document.getElementById('nasaLoading');
+    const content = document.getElementById('nasaContent');
+    if (!loading || !content) return;
+
+    document.getElementById('nasaImg').src = "public/images/project kopi 1.png"; // Fallback to an existing local space/nice image or custom url
+    // Let's use a beautiful public unsplash space image to make it look real!
+    document.getElementById('nasaImg').src = "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?q=80&w=600&auto=format&fit=crop";
+    document.getElementById('nasaTitle').textContent = "Pillars of Creation (James Webb Space Telescope)";
+    document.getElementById('nasaExplanation').textContent = "Pilar-Pilar Penciptaan (Pillars of Creation) adalah salah satu struktur kosmik paling ikonik di alam semesta. Terletak di Nebula Elang (M16) berjarak sekitar 6.500 tahun cahaya dari Bumi, pilar gas dan debu tebal ini merupakan tempat persemaian bintang-bintang baru yang lahir. Citra inframerah dekat dari Teleskop James Webb ini menembus debu kosmik untuk memperlihatkan ratusan bintang muda yang baru terbentuk berkilau merah menyala.";
+    document.getElementById('nasaDate').textContent = "Foto Favorit: James Webb Infrared View";
+
+    loading.style.display = 'none';
+    content.style.display = 'grid';
+}
+
+function fetchNasaApod() {
+    const loading = document.getElementById('nasaLoading');
+    const content = document.getElementById('nasaContent');
+    if (!loading || !content) return;
+
+    const today = new Date().toISOString().split('T')[0];
+
+    // Check if we have cached APOD data for today
+    const cachedDate = localStorage.getItem('nasa-apod-date');
+    const cachedTitle = localStorage.getItem('nasa-apod-title');
+    const cachedUrl = localStorage.getItem('nasa-apod-url');
+    const cachedExplanation = localStorage.getItem('nasa-apod-explanation');
+
+    if (cachedDate === today && cachedTitle && cachedUrl && cachedExplanation) {
+        // Load from cache
+        document.getElementById('nasaImg').src = cachedUrl;
+        document.getElementById('nasaTitle').textContent = cachedTitle;
+        document.getElementById('nasaExplanation').textContent = cachedExplanation;
+        document.getElementById('nasaDate').textContent = `Tanggal: ${cachedDate} (Dari Cache Lokal)`;
+
+        loading.style.display = 'none';
+        content.style.display = 'grid';
+        return;
+    }
+
+    // Fetch from NASA API
+    fetch('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY')
+        .then(response => {
+            if (!response.ok) throw new Error('NASA API Failed');
+            return response.json();
+        })
+        .then(data => {
+            // Handle videos (like YouTube embeds) occasionally returned by APOD
+            let mediaUrl = data.url;
+            if (data.media_type === 'video') {
+                mediaUrl = data.thumbnail_url || "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop";
+            }
+
+            // Populate DOM
+            document.getElementById('nasaImg').src = mediaUrl;
+            document.getElementById('nasaTitle').textContent = data.title;
+            document.getElementById('nasaExplanation').textContent = data.explanation;
+            document.getElementById('nasaDate').textContent = `Tanggal: ${data.date} (NASA APOD Live)`;
+
+            // Cache data
+            localStorage.setItem('nasa-apod-date', today);
+            localStorage.setItem('nasa-apod-title', data.title);
+            localStorage.setItem('nasa-apod-url', mediaUrl);
+            localStorage.setItem('nasa-apod-explanation', data.explanation);
+
+            loading.style.display = 'none';
+            content.style.display = 'grid';
+        })
+        .catch(err => {
+            console.warn('NASA API rate limit exceeded or network error. Using fallback APOD.', err);
+            showNasaFallback();
+        });
+}
+
+window.fetchNasaApod = fetchNasaApod;
+
+/* ==========================================================================
+   20. 3D ORBIT SKILL TAG CLOUD LOGIC
+   ========================================================================== */
+
+function init3DTagCloud() {
+    const canvas = document.getElementById('skillsCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    const skills = [
+        "HTML5", "CSS3", "JavaScript", "PHP", "MySQL",
+        "Tailwind CSS", "Bootstrap", "Node.js", "REST API",
+        "Git & GitHub", "Python", "Data Analysis", "UI/UX Design",
+        "AI Screening", "POS System", "Web UMKM", "Responsive"
+    ];
+
+    const count = skills.length;
+    const tags = [];
+    const radius = 95; // Sphere radius
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+
+    // Mouse coords relative to canvas center
+    let mouseX = 0;
+    let mouseY = 0;
+    let isMouseOver = false;
+
+    // Default rotation speed
+    let speedX = 0.003;
+    let speedY = 0.003;
+
+    // Distribute tags uniformly on a sphere
+    for (let i = 0; i < count; i++) {
+        // Fibonacci sphere / Golden spiral distribution
+        const phi = Math.acos(-1 + (2 * i + 1) / count);
+        const theta = i * Math.PI * (3 - Math.sqrt(5)); // Golden angle
+
+        tags.push({
+            text: skills[i],
+            x: radius * Math.cos(theta) * Math.sin(phi),
+            y: radius * Math.sin(theta) * Math.sin(phi),
+            z: radius * Math.cos(phi),
+            projX: 0,
+            projY: 0,
+            scale: 1,
+            opacity: 1,
+            hovered: false
+        });
+    }
+
+    // Rotate coordinates around Y axis
+    function rotateY(tag, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        const x1 = tag.x * cos - tag.z * sin;
+        const z1 = tag.z * cos + tag.x * sin;
+        tag.x = x1;
+        tag.z = z1;
+    }
+
+    // Rotate coordinates around X axis
+    function rotateX(tag, angle) {
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        const y1 = tag.y * cos - tag.z * sin;
+        const z1 = tag.z * cos + tag.y * sin;
+        tag.y = y1;
+        tag.z = z1;
+    }
+
+    // Update and draw loop
+    function update() {
+        let currentSpeedX = speedX;
+        let currentSpeedY = speedY;
+
+        if (isMouseOver) {
+            // Speed based on distance from center
+            currentSpeedX = (mouseY / cy) * 0.015;
+            currentSpeedY = -(mouseX / cx) * 0.015;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Update tag positions & project to 2D
+        tags.forEach(tag => {
+            rotateX(tag, currentSpeedX);
+            rotateY(tag, currentSpeedY);
+
+            // Perspective projection
+            const distance = 200; // Camera distance
+            tag.scale = distance / (distance + tag.z);
+            tag.projX = cx + tag.x * tag.scale;
+            tag.projY = cy + tag.y * tag.scale;
+
+            // Opacity based on depth (z)
+            tag.opacity = (tag.scale - 0.5) * 0.85 + 0.15;
+            if (tag.opacity < 0.1) tag.opacity = 0.1;
+            if (tag.opacity > 1) tag.opacity = 1;
+        });
+
+        // Sort tags by depth (z) descending (painter's algorithm)
+        const sortedTags = [...tags].sort((a, b) => b.z - a.z);
+
+        // Draw tags
+        sortedTags.forEach(tag => {
+            const isDark = document.body.classList.contains('dark-theme');
+            const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#6c5ce7';
+            const defaultColor = isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(45, 52, 54, 0.8)';
+
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            // Size based on scale depth
+            const fontSize = Math.round(11 * tag.scale + 3);
+            ctx.font = `600 ${fontSize}px 'Space Grotesk', sans-serif`;
+
+            if (tag.hovered) {
+                ctx.fillStyle = accentColor;
+                ctx.shadowColor = accentColor;
+                ctx.shadowBlur = 8;
+            } else {
+                ctx.fillStyle = defaultColor;
+                ctx.shadowBlur = 0;
+            }
+
+            ctx.globalAlpha = tag.opacity;
+            ctx.fillText(tag.text, tag.projX, tag.projY);
+            ctx.restore();
+        });
+
+        requestAnimationFrame(update);
+    }
+
+    function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * canvas.width;
+        const y = ((e.clientY - rect.top) / rect.height) * canvas.height;
+        mouseX = x - cx;
+        mouseY = y - cy;
+    }
+
+    canvas.addEventListener('mousemove', (e) => {
+        isMouseOver = true;
+        getMousePos(e);
+
+        let anyHovered = false;
+        tags.forEach(tag => {
+            const dx = (e.clientX - canvas.getBoundingClientRect().left) * (canvas.width / canvas.getBoundingClientRect().width) - tag.projX;
+            const dy = (e.clientY - canvas.getBoundingClientRect().top) * (canvas.height / canvas.getBoundingClientRect().height) - tag.projY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            const textWidth = ctx.measureText(tag.text).width;
+            const size = Math.max(textWidth, 40) / 2 + 5;
+
+            if (distance < size && tag.z < 20) {
+                tag.hovered = true;
+                anyHovered = true;
+            } else {
+                tag.hovered = false;
+            }
+        });
+
+        canvas.style.cursor = anyHovered ? 'pointer' : 'default';
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+        isMouseOver = false;
+        tags.forEach(tag => tag.hovered = false);
+        canvas.style.cursor = 'default';
+    });
+
+    canvas.addEventListener('click', () => {
+        const clickedTag = tags.find(tag => tag.hovered);
+        if (clickedTag) {
+            const chatbotWindow = document.getElementById('chatbotWindow');
+            if (chatbotWindow) {
+                if (!chatbotWindow.classList.contains('active')) {
+                    toggleChatbot();
+                }
+                askAstroBot('skills');
+            }
+        }
+    });
+
+    update();
+}
+
+window.init3DTagCloud = init3DTagCloud;
+
+/* ==========================================================================
+   22. ASTRO-JUMP MINIGAME LOGIC
+   ========================================================================== */
+
+let isGameModalOpen = false;
+let isPlaying = false;
+let isGameOver = false;
+let gameScore = 0;
+let gameHighScore = 0;
+let gameAnimationId = null;
+
+const astronaut = {
+    x: 60,
+    y: 133, // 180 (ground) - 47 (height)
+    width: 26,
+    height: 47,
+    velocityY: 0,
+    gravity: 0.55,
+    jumpStrength: -10.5,
+    isJumping: false
+};
+
+let obstacles = [];
+let gameStars = [];
+let nextObstacleTimer = 0;
+
+// Initialize background stars
+for (let i = 0; i < 25; i++) {
+    gameStars.push({
+        x: Math.random() * 600,
+        y: Math.random() * 160,
+        size: Math.random() * 1.8 + 0.2,
+        speed: Math.random() * 1.2 + 0.3
+    });
+}
+
+function openGameModal() {
+    isGameModalOpen = true;
+    const modal = document.getElementById('gameModal');
+    if (!modal) return;
+
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // Reset scoreboard in UI
+    gameHighScore = parseInt(localStorage.getItem('astro-jump-highscore') || '0', 10);
+    document.getElementById('gameHighScore').textContent = gameHighScore;
+    document.getElementById('gameScore').textContent = '0';
+
+    // Show start overlay, hide game over overlay
+    document.getElementById('gameStartOverlay').style.display = 'flex';
+    document.getElementById('gameOverOverlay').style.display = 'none';
+
+    // Draw initial static state
+    drawStaticScene();
+
+    // Bind listeners
+    document.addEventListener('keydown', handleGameKeys);
+
+    const jumpBtn = document.getElementById('gameJumpBtn');
+    if (jumpBtn) {
+        jumpBtn.onclick = (e) => {
+            e.preventDefault();
+            triggerJump();
+        };
+    }
+}
+
+function closeGameModal() {
+    isGameModalOpen = false;
+    isPlaying = false;
+    isGameOver = false;
+
+    const modal = document.getElementById('gameModal');
+    if (modal) modal.classList.remove('active');
+    document.body.style.overflow = '';
+
+    // Unbind listeners
+    document.removeEventListener('keydown', handleGameKeys);
+
+    if (gameAnimationId) {
+        cancelAnimationFrame(gameAnimationId);
+        gameAnimationId = null;
+    }
+}
+
+function triggerJump() {
+    if (!isPlaying) {
+        startGame();
+        return;
+    }
+    if (!astronaut.isJumping) {
+        astronaut.velocityY = astronaut.jumpStrength;
+        astronaut.isJumping = true;
+    }
+}
+
+function handleGameKeys(e) {
+    if (!isGameModalOpen) return;
+
+    if (e.key === ' ' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        triggerJump();
+    } else if (e.key === 'Escape') {
+        closeGameModal();
+    }
+}
+
+function drawStaticScene() {
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw stars
+    drawAndUpdateStars(ctx);
+
+    // Draw ground
+    drawGround(ctx);
+
+    // Draw astronaut standing
+    astronaut.y = 133;
+    astronaut.velocityY = 0;
+    astronaut.isJumping = false;
+    drawAstronaut(ctx, astronaut);
+}
+
+function startGame() {
+    isPlaying = true;
+    isGameOver = false;
+    gameScore = 0;
+    obstacles = [];
+    nextObstacleTimer = 40;
+
+    astronaut.y = 133;
+    astronaut.velocityY = 0;
+    astronaut.isJumping = false;
+
+    document.getElementById('gameStartOverlay').style.display = 'none';
+    document.getElementById('gameOverOverlay').style.display = 'none';
+    document.getElementById('gameScore').textContent = '0';
+
+    if (gameAnimationId) {
+        cancelAnimationFrame(gameAnimationId);
+    }
+    gameAnimationId = requestAnimationFrame(gameLoop);
+}
+
+function gameLoop() {
+    if (!isPlaying) return;
+
+    updateGameLogic();
+    drawGameScene();
+
+    if (!isGameOver) {
+        gameAnimationId = requestAnimationFrame(gameLoop);
+    }
+}
+
+function updateGameLogic() {
+    // 1. Gravity & Jump physics
+    astronaut.velocityY += astronaut.gravity;
+    astronaut.y += astronaut.velocityY;
+
+    // Check ground collision
+    if (astronaut.y >= 133) {
+        astronaut.y = 133;
+        astronaut.velocityY = 0;
+        astronaut.isJumping = false;
+    }
+
+    // 2. Spawn obstacles (meteors)
+    nextObstacleTimer--;
+    if (nextObstacleTimer <= 0) {
+        const size = Math.floor(Math.random() * 12) + 20;
+        const isFloating = Math.random() < 0.25;
+        const obstacleY = isFloating ? 100 : 180 - size;
+        const speed = 5.2 + Math.min(gameScore / 25, 4.8);
+
+        obstacles.push({
+            x: 600,
+            y: obstacleY,
+            width: size,
+            height: size,
+            speed: speed,
+            passed: false
+        });
+
+        nextObstacleTimer = Math.floor(Math.random() * 65) + 75;
+    }
+
+    // 3. Move obstacles and check collisions
+    obstacles.forEach(obs => {
+        obs.x -= obs.speed;
+
+        if (!obs.passed && obs.x + obs.width < astronaut.x) {
+            obs.passed = true;
+            gameScore++;
+            document.getElementById('gameScore').textContent = gameScore;
+
+            if (gameScore > gameHighScore) {
+                gameHighScore = gameScore;
+                document.getElementById('gameHighScore').textContent = gameHighScore;
+                localStorage.setItem('astro-jump-highscore', gameHighScore);
+            }
+        }
+
+        // AABB Collision with small margin reduction
+        const astBox = {
+            left: astronaut.x + 4,
+            right: astronaut.x + astronaut.width - 4,
+            top: astronaut.y + 2,
+            bottom: astronaut.y + astronaut.height - 2
+        };
+
+        const obsBox = {
+            left: obs.x + 3,
+            right: obs.x + obs.width - 3,
+            top: obs.y + 3,
+            bottom: obs.y + obs.height - 3
+        };
+
+        if (astBox.left < obsBox.right &&
+            astBox.right > obsBox.left &&
+            astBox.top < obsBox.bottom &&
+            astBox.bottom > obsBox.top) {
+            endGame();
+        }
+    });
+
+    obstacles = obstacles.filter(obs => obs.x + obs.width > 0);
+}
+
+function endGame() {
+    isGameOver = true;
+    isPlaying = false;
+
+    document.getElementById('finalScore').textContent = gameScore;
+    document.getElementById('gameOverOverlay').style.display = 'flex';
+
+    if (gameAnimationId) {
+        cancelAnimationFrame(gameAnimationId);
+        gameAnimationId = null;
+    }
+}
+
+function drawGameScene() {
+    const canvas = document.getElementById('gameCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    drawAndUpdateStars(ctx);
+    drawGround(ctx);
+
+    obstacles.forEach(obs => {
+        drawObstacle(ctx, obs);
+    });
+
+    drawAstronaut(ctx, astronaut);
+}
+
+function drawAndUpdateStars(ctx) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    gameStars.forEach(star => {
+        if (isPlaying && !isGameOver) {
+            star.x -= star.speed;
+            if (star.x < 0) {
+                star.x = 600;
+                star.y = Math.random() * 160;
+            }
+        }
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    ctx.restore();
+}
+
+function drawGround(ctx) {
+    ctx.save();
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#6c5ce7';
+    const accentRgb = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim() || '108, 92, 231';
+
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(0, 180);
+    ctx.lineTo(600, 180);
+    ctx.stroke();
+
+    const gradient = ctx.createLinearGradient(0, 180, 0, 200);
+    gradient.addColorStop(0, `rgba(${accentRgb}, 0.15)`);
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 180, 600, 20);
+
+    ctx.restore();
+}
+
+function drawAstronaut(ctx, ast) {
+    const accent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#6c5ce7';
+    ctx.save();
+
+    // Flame
+    if (ast.isJumping && ast.velocityY < 0) {
+        ctx.fillStyle = '#ff9f43';
+        ctx.beginPath();
+        ctx.moveTo(ast.x - 3, ast.y + 35);
+        ctx.lineTo(ast.x - 8, ast.y + 45 + Math.random() * 5);
+        ctx.lineTo(ast.x - 1, ast.y + 39);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#ffff00';
+        ctx.beginPath();
+        ctx.moveTo(ast.x - 3, ast.y + 35);
+        ctx.lineTo(ast.x - 6, ast.y + 41 + Math.random() * 3);
+        ctx.lineTo(ast.x - 1, ast.y + 37);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // Jetpack
+    ctx.fillStyle = '#8e92bc';
+    ctx.beginPath();
+    ctx.roundRect(ast.x - 4, ast.y + 20, 8, 16, 2);
+    ctx.fill();
+
+    // Body (Suit)
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.roundRect(ast.x + 4, ast.y + 18, 22, 20, 5);
+    ctx.fill();
+
+    // Details
+    ctx.fillStyle = accent;
+    ctx.fillRect(ast.x + 10, ast.y + 24, 10, 4);
+    ctx.fillStyle = '#00cec9';
+    ctx.fillRect(ast.x + 11, ast.y + 30, 3, 3);
+    ctx.fillStyle = '#ff7675';
+    ctx.fillRect(ast.x + 16, ast.y + 30, 3, 3);
+
+    // Helmet
+    ctx.fillStyle = '#f5f6fa';
+    ctx.beginPath();
+    ctx.arc(ast.x + 15, ast.y + 11, 10, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#dcdde1';
+    ctx.stroke();
+
+    // Visor
+    ctx.fillStyle = '#2f3542';
+    ctx.beginPath();
+    ctx.arc(ast.x + 17, ast.y + 11, 7, -Math.PI / 2, Math.PI / 2);
+    ctx.fill();
+
+    // Shine
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.beginPath();
+    ctx.ellipse(ast.x + 19, ast.y + 8, 2, 4, Math.PI / 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Legs
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(ast.x + 6, ast.y + 38, 7, 7);
+    ctx.fillRect(ast.x + 17, ast.y + 38, 7, 7);
+
+    // Boots
+    ctx.fillStyle = accent;
+    ctx.fillRect(ast.x + 5, ast.y + 44, 9, 3);
+    ctx.fillRect(ast.x + 16, ast.y + 44, 9, 3);
+
+    ctx.restore();
+}
+
+function drawObstacle(ctx, obs) {
+    ctx.save();
+
+    // Tail
+    const gradient = ctx.createLinearGradient(obs.x + obs.width, obs.y + obs.height / 2, obs.x + obs.width + 30, obs.y + obs.height / 2);
+    gradient.addColorStop(0, 'rgba(255, 118, 117, 0.8)');
+    gradient.addColorStop(0.5, 'rgba(253, 121, 168, 0.4)');
+    gradient.addColorStop(1, 'rgba(108, 92, 231, 0)');
+
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(obs.x + obs.width / 2, obs.y);
+    ctx.lineTo(obs.x + obs.width + 40, obs.y + obs.height / 2 - 5);
+    ctx.lineTo(obs.x + obs.width + 40, obs.y + obs.height / 2 + 5);
+    ctx.lineTo(obs.x + obs.width / 2, obs.y + obs.height);
+    ctx.closePath();
+    ctx.fill();
+
+    // Body
+    ctx.fillStyle = '#57606f';
+    ctx.beginPath();
+    ctx.arc(obs.x + obs.width / 2, obs.y + obs.height / 2, obs.width / 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#2f3542';
+    ctx.stroke();
+
+    // Craters
+    ctx.fillStyle = '#2f3542';
+    ctx.beginPath();
+    ctx.arc(obs.x + obs.width * 0.4, obs.y + obs.height * 0.35, obs.width * 0.15, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(obs.x + obs.width * 0.7, obs.y + obs.height * 0.6, obs.width * 0.1, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(obs.x + obs.width * 0.35, obs.y + obs.height * 0.7, obs.width * 0.08, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+}
+
+window.openGameModal = openGameModal;
+window.closeGameModal = closeGameModal;
+window.startGame = startGame;
+

@@ -51,6 +51,24 @@
                 <a href="#contact" class="nav-link">Kontak</a>
             </nav>
             <div class="nav-actions">
+                <!-- Color Accent Picker -->
+                <div class="accent-picker-container" id="accentPickerContainer">
+                    <button class="theme-toggle" id="accentPickerToggle" aria-label="Pilih Warna Aksen">
+                        <i class="fa-solid fa-palette"></i>
+                    </button>
+                    <div class="accent-dropdown glass-card" id="accentDropdown">
+                        <button class="accent-opt color-purple active"
+                            onclick="setAccentColor('#6c5ce7', '108, 92, 231', 'purple')"
+                            title="Nebula Purple"></button>
+                        <button class="accent-opt color-cyan" onclick="setAccentColor('#00cec9', '0, 206, 201', 'cyan')"
+                            title="Supernova Cyan"></button>
+                        <button class="accent-opt color-pink"
+                            onclick="setAccentColor('#fd79a8', '253, 121, 168', 'pink')" title="Cosmic Pink"></button>
+                        <button class="accent-opt color-green"
+                            onclick="setAccentColor('#2ecc71', '46, 204, 113', 'green')" title="Aurora Green"></button>
+                    </div>
+                </div>
+
                 <button class="theme-toggle" id="themeToggle" aria-label="Ubah Tema">
                     <i class="fa-solid fa-moon"></i>
                 </button>
@@ -78,10 +96,24 @@
                         Saya seorang Mahasiswa <strong>Teknik Informatika</strong> yang mengkhususkan diri dalam <span
                             id="typewriter" class="typewriter-text"></span><span class="typewriter-cursor">|</span>
                     </p>
+
+                    <!-- Dynamic Weather & Location Greeting Card -->
+                    <div class="geo-greeting-card glass-card animate-init" id="geoGreeting" data-delay="600">
+                        <div class="geo-icon-wrapper">
+                            <i class="fa-solid fa-satellite-dish geo-icon-pulse"></i>
+                        </div>
+                        <div class="geo-text-wrapper">
+                            <span class="geo-status-dot"></span>
+                            <p id="geoGreetingText">Menghubungkan ke satelit cuaca lokal...</p>
+                        </div>
+                    </div>
+
                     <div class="hero-buttons animate-init" data-delay="700">
                         <a href="#portfolio" class="btn btn-primary">Lihat Project <i
                                 class="fa-solid fa-arrow-right"></i></a>
                         <a href="#contact" class="btn btn-outline">Hubungi Saya</a>
+                        <button class="btn btn-game" onclick="openGameModal()" aria-label="Main Game Astro Jump"><i
+                                class="fa-solid fa-gamepad"></i> Main Game</button>
                     </div>
                 </div>
                 <div class="hero-visual animate-init" data-delay="400">
@@ -247,6 +279,30 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- NASA APOD (Astronomy Picture of the Day) Widget -->
+                <div class="nasa-apod-container glass-card animate-init" id="nasaApodSection" data-delay="300">
+                    <div class="nasa-header">
+                        <h3><i class="fa-solid fa-user-astronaut text-accent"></i> NASA Astronomy Picture of the Day
+                        </h3>
+                        <span class="nasa-badge-tag">NASA API Live</span>
+                    </div>
+                    <div class="nasa-body">
+                        <div id="nasaLoading" class="nasa-loading">
+                            <i class="fa-solid fa-circle-notch fa-spin"></i> Memanggil satelit NASA...
+                        </div>
+                        <div id="nasaContent" class="nasa-content-wrapper" style="display: none;">
+                            <div class="nasa-media-wrapper">
+                                <img id="nasaImg" src="" alt="Astronomy Picture of the Day">
+                            </div>
+                            <div class="nasa-details">
+                                <h4 id="nasaTitle">Loading Title</h4>
+                                <p id="nasaExplanation" class="text-secondary">Explanation text...</p>
+                                <span id="nasaDate" class="text-muted small-text">Date: ...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -264,6 +320,17 @@
                             <canvas id="skillsChart"></canvas>
                         </div>
                     </div>
+
+                    <!-- 3D Orbit Skill Tag Cloud -->
+                    <div class="skills-3d-cloud-container glass-card animate-init" data-delay="300">
+                        <h3><i class="fa-solid fa-earth-asia text-accent"></i> Awan Kompetensi 3D</h3>
+                        <div class="canvas-wrapper-3d">
+                            <canvas id="skillsCanvas" width="300" height="300"></canvas>
+                        </div>
+                        <p class="canvas-hint"><i class="fa-solid fa-arrow-pointer"></i> Gerakkan kursor di atas bola
+                            untuk mengatur rotasi</p>
+                    </div>
+
                     <div class="skills-list-container">
                         <div class="skills-category glass-card">
                             <h4><i class="fa-solid fa-code text-accent"></i> Frontend Development</h4>
@@ -781,6 +848,7 @@
                 <button class="reply-chip" onclick="askAstroBot('skills')">Keahlian?</button>
                 <button class="reply-chip" onclick="askAstroBot('proyek')">Proyek Terkini?</button>
                 <button class="reply-chip" onclick="askAstroBot('kontak')">Cara Hubungi?</button>
+                <button class="reply-chip" onclick="askAstroBot('game')">Main Game? 🎮</button>
             </div>
         </div>
     </div>
@@ -819,6 +887,51 @@
                     <button class="wa-send-btn" onclick="triggerCustomWaMessage()" aria-label="Kirim ke WhatsApp">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Astro-Jump Easter Egg Minigame Modal -->
+    <div class="modal" id="gameModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-backdrop" onclick="closeGameModal()"></div>
+        <div class="modal-content glass-card game-modal-content">
+            <button class="modal-close" onclick="closeGameModal()" aria-label="Tutup Game">
+                <i class="fa-solid fa-times"></i>
+            </button>
+            <div class="modal-body game-modal-body">
+                <div class="game-header">
+                    <h2><i class="fa-solid fa-gamepad text-accent"></i> Astro-Jump Minigame</h2>
+                    <p>Bantu astronaut melompati rintangan meteor di luar angkasa!</p>
+                </div>
+                <div class="game-container">
+                    <div class="game-scoreboard">
+                        <div class="score-box">Score: <span id="gameScore">0</span></div>
+                        <div class="score-box">High Score: <span id="gameHighScore">0</span></div>
+                    </div>
+                    <div class="game-canvas-wrapper">
+                        <canvas id="gameCanvas" width="600" height="200"></canvas>
+                        <div class="game-start-overlay" id="gameStartOverlay" onclick="startGame()">
+                            <div class="overlay-content">
+                                <i class="fa-solid fa-circle-play play-icon"></i>
+                                <h3>Klik / Tekan SPACE untuk Bermain</h3>
+                                <p>Gunakan tombol <strong>SPACE</strong> atau <strong>TAP layar</strong> untuk melompat
+                                </p>
+                            </div>
+                        </div>
+                        <div class="game-over-overlay" id="gameOverOverlay" style="display: none;">
+                            <div class="overlay-content">
+                                <i class="fa-solid fa-skull-crossbones death-icon"></i>
+                                <h3>GAME OVER</h3>
+                                <p>Skor Akhir Anda: <span id="finalScore">0</span></p>
+                                <button class="btn btn-primary" onclick="startGame()"><i
+                                        class="fa-solid fa-arrows-rotate"></i> Main Lagi</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-controls">
+                        <button class="btn btn-outline" id="gameJumpBtn">Lompat! (SPACE)</button>
+                    </div>
                 </div>
             </div>
         </div>
