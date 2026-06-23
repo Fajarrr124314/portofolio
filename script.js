@@ -32,12 +32,12 @@ function initNavbar() {
         } else {
             header.classList.remove('scrolled');
         }
-        
+
         // Dynamic link activation on scroll
         let currentSectionId = '';
         const sections = document.querySelectorAll('section');
         const scrollPosition = window.scrollY + 150;
-        
+
         sections.forEach(section => {
             const sectionTop = section.offsetTop;
             const sectionHeight = section.offsetHeight;
@@ -45,7 +45,7 @@ function initNavbar() {
                 currentSectionId = section.getAttribute('id');
             }
         });
-        
+
         if (currentSectionId) {
             navLinks.forEach(link => {
                 link.classList.remove('active');
@@ -87,13 +87,13 @@ function initSkillsChart() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const isDark = document.body.classList.contains('dark-theme');
-    
+
     // Choose colors based on theme
     const labelColor = isDark ? '#a4a7c6' : '#5a5d7c';
     const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(108, 92, 231, 0.08)';
     const tickColor = isDark ? '#6b6e8d' : '#8e92bc';
     const angleColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(108, 92, 231, 0.15)';
-    
+
     // Skill metrics
     const data = {
         labels: [
@@ -188,7 +188,7 @@ function initSkillsChart() {
 
 function initScrollAnimations() {
     const animElements = document.querySelectorAll('.animate-init');
-    
+
     const observerOptions = {
         root: null,
         rootMargin: '0px',
@@ -222,7 +222,7 @@ function initPortfolioScroll() {
     if (!container || !prevBtn || !nextBtn) return;
 
     // Scroll step width matching card size + gap
-    const scrollStep = 390; 
+    const scrollStep = 390;
 
     nextBtn.addEventListener('click', () => {
         container.scrollBy({
@@ -242,17 +242,17 @@ function initPortfolioScroll() {
     const updateButtonsState = () => {
         const isAtStart = container.scrollLeft <= 10;
         const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 10;
-        
+
         prevBtn.style.opacity = isAtStart ? '0.4' : '1';
         prevBtn.style.pointerEvents = isAtStart ? 'none' : 'auto';
-        
+
         nextBtn.style.opacity = isAtEnd ? '0.4' : '1';
         nextBtn.style.pointerEvents = isAtEnd ? 'none' : 'auto';
     };
 
     container.addEventListener('scroll', updateButtonsState);
     window.addEventListener('resize', updateButtonsState);
-    
+
     // Initial check
     setTimeout(updateButtonsState, 200);
 }
@@ -276,7 +276,7 @@ function initPortfolioFilters() {
 
             cards.forEach(card => {
                 const cardCategory = card.getAttribute('data-category');
-                
+
                 if (filterValue === 'all' || cardCategory === filterValue) {
                     card.classList.remove('filtered-out');
                 } else {
@@ -451,13 +451,13 @@ function openProjectModal(projectKey) {
     project.images.forEach((imgSrc, idx) => {
         const slide = document.createElement('div');
         slide.className = 'carousel-slide';
-        
+
         const img = document.createElement('img');
         img.src = imgSrc;
         img.alt = `${project.title} Screenshot ${idx + 1}`;
         // Prevent lazy loading delay during user viewing
         img.loading = "eager";
-        
+
         slide.appendChild(img);
         carouselTrack.appendChild(slide);
     });
@@ -479,14 +479,14 @@ function openProjectModal(projectKey) {
     // Set Action Links (Live Demo & Source Code)
     const liveLinkBtn = document.getElementById('modalLiveLink');
     const repoLinkBtn = document.getElementById('modalRepoLink');
-    
+
     if (project.demoLink) {
         liveLinkBtn.href = project.demoLink;
         liveLinkBtn.style.display = 'inline-flex';
     } else {
         liveLinkBtn.style.display = 'none';
     }
-    
+
     if (project.repoLink) {
         repoLinkBtn.href = project.repoLink;
         repoLinkBtn.style.display = 'inline-flex';
@@ -507,19 +507,19 @@ function closeProjectModal() {
     const modal = document.getElementById('projectModal');
     modal.classList.remove('active');
     document.body.style.overflow = ''; // Unlock main scroll
-    
+
     // Remove keyboard listener to free memory
     document.removeEventListener('keydown', handleModalKeys);
 }
 
 function goToSlide(index) {
     if (index < 0 || index >= modalImagesCount) return;
-    
+
     activeSlideIndex = index;
-    
+
     const track = document.getElementById('carouselTrack');
     track.style.transform = `translateX(-${activeSlideIndex * 100}%)`;
-    
+
     // Update dots
     const dots = document.querySelectorAll('.carousel-dot');
     dots.forEach((dot, idx) => {
@@ -552,9 +552,9 @@ function prevSlide() {
 function updateCarouselButtons() {
     const prevBtn = document.getElementById('carouselPrevBtn');
     const nextBtn = document.getElementById('carouselNextBtn');
-    
+
     if (!prevBtn || !nextBtn) return;
-    
+
     // Wire up events
     prevBtn.onclick = prevSlide;
     nextBtn.onclick = nextSlide;
@@ -629,49 +629,49 @@ window.closeCertLightbox = closeCertLightbox;
 
 function handleFormSubmit(e) {
     e.preventDefault();
-    
+
     const form = document.getElementById('contactForm');
     const status = document.getElementById('formStatus');
     const submitBtn = form.querySelector('.btn-submit');
-    
+
     // Ambil token Web3Forms
     const accessKeyInput = form.querySelector('input[name="access_key"]');
     const accessKey = accessKeyInput ? accessKeyInput.value.trim() : '';
-    
+
     // Change button state to loading
     const originalBtnHTML = submitBtn.innerHTML;
     submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Mengirim Pesan...';
     submitBtn.disabled = true;
-    
+
     // Jika masih menggunakan placeholder, jalankan simulasi agar tidak error
     if (!accessKey || accessKey === 'YOUR_ACCESS_KEY_HERE') {
         setTimeout(() => {
             status.className = "form-status success animate-init animate-play";
             status.style.display = 'block';
             status.innerHTML = '<i class="fa-solid fa-circle-check"></i> <strong>Simulasi Sukses!</strong> Terima kasih telah menghubungi Fajar. Pesan Anda akan dibalas sesegera mungkin. <br><small style="opacity: 0.85;">(Catatan: Untuk pengiriman email asli, silakan ganti value access_key di index.html dengan key Web3Forms Anda)</small>';
-            
+
             // Reset form
             form.reset();
-            
+
             // Restore button state
             submitBtn.innerHTML = originalBtnHTML;
             submitBtn.disabled = false;
-            
+
             // Auto scroll status into view
             status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
+
             // Hide message after 8 seconds
             setTimeout(() => {
                 status.style.display = 'none';
             }, 8000);
-            
+
         }, 1500);
     } else {
         // Pengiriman email asli ke Web3Forms API
         const formData = new FormData(form);
         const object = Object.fromEntries(formData);
         const json = JSON.stringify(object);
-        
+
         fetch('https://api.web3forms.com/submit', {
             method: 'POST',
             headers: {
@@ -680,36 +680,36 @@ function handleFormSubmit(e) {
             },
             body: json
         })
-        .then(async (response) => {
-            let jsonRes = await response.json();
-            if (response.status == 200) {
-                status.className = "form-status success animate-init animate-play";
-                status.style.display = 'block';
-                status.innerHTML = '<i class="fa-solid fa-circle-check"></i> Pesan asli terkirim! Terima kasih telah menghubungi Fajar. Pesan Anda akan segera dibalas.';
-                form.reset();
-            } else {
+            .then(async (response) => {
+                let jsonRes = await response.json();
+                if (response.status == 200) {
+                    status.className = "form-status success animate-init animate-play";
+                    status.style.display = 'block';
+                    status.innerHTML = '<i class="fa-solid fa-circle-check"></i> Pesan asli terkirim! Terima kasih telah menghubungi Fajar. Pesan Anda akan segera dibalas.';
+                    form.reset();
+                } else {
+                    status.className = "form-status error animate-init animate-play";
+                    status.style.display = 'block';
+                    status.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Gagal mengirim pesan: ${jsonRes.message || 'Terjadi kesalahan server.'}`;
+                }
+            })
+            .catch(error => {
+                console.error(error);
                 status.className = "form-status error animate-init animate-play";
                 status.style.display = 'block';
-                status.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Gagal mengirim pesan: ${jsonRes.message || 'Terjadi kesalahan server.'}`;
-            }
-        })
-        .catch(error => {
-            console.error(error);
-            status.className = "form-status error animate-init animate-play";
-            status.style.display = 'block';
-            status.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Terjadi kesalahan jaringan. Silakan periksa koneksi Anda dan coba lagi.';
-        })
-        .then(() => {
-            // Restore button state
-            submitBtn.innerHTML = originalBtnHTML;
-            submitBtn.disabled = false;
-            status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            
-            // Hide message after 8 seconds
-            setTimeout(() => {
-                status.style.display = 'none';
-            }, 8000);
-        });
+                status.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> Terjadi kesalahan jaringan. Silakan periksa koneksi Anda dan coba lagi.';
+            })
+            .then(() => {
+                // Restore button state
+                submitBtn.innerHTML = originalBtnHTML;
+                submitBtn.disabled = false;
+                status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                // Hide message after 8 seconds
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 8000);
+            });
     }
 }
 
@@ -722,15 +722,15 @@ window.handleFormSubmit = handleFormSubmit;
 function initThemeToggle() {
     const themeToggleBtn = document.getElementById('themeToggle');
     if (!themeToggleBtn) return;
-    
+
     const icon = themeToggleBtn.querySelector('i');
-    
+
     // Check localStorage or device system theme preference
     const savedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     const isDarkDefault = savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
-    
+
     if (isDarkDefault) {
         document.body.classList.add('dark-theme');
         icon.className = 'fa-solid fa-sun';
@@ -738,16 +738,16 @@ function initThemeToggle() {
         document.body.classList.remove('dark-theme');
         icon.className = 'fa-solid fa-moon';
     }
-    
+
     themeToggleBtn.addEventListener('click', () => {
         const isDark = document.body.classList.toggle('dark-theme');
-        
+
         // Persist theme choice
         localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        
+
         // Update toggle icon
         icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-        
+
         // Update Chart colors
         updateChartTheme(isDark);
     });
@@ -773,13 +773,13 @@ function updateChartTheme(isDark) {
     if (window.analyticsChartInstance) {
         const textColor = isDark ? '#a4a7c6' : '#5a5d7c';
         const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(108, 92, 231, 0.06)';
-        
+
         window.analyticsChartInstance.options.scales.x.ticks.color = textColor;
         window.analyticsChartInstance.options.scales.x.grid.color = gridColor;
         window.analyticsChartInstance.options.scales.y.ticks.color = textColor;
         window.analyticsChartInstance.options.scales.y.grid.color = gridColor;
         window.analyticsChartInstance.options.scales.y.title.color = textColor;
-        
+
         window.analyticsChartInstance.update();
     }
 }
@@ -791,22 +791,22 @@ function updateChartTheme(isDark) {
 function initTypewriter() {
     const target = document.getElementById('typewriter');
     if (!target) return;
-    
+
     const words = [
         "pengembangan web.",
         "analisis data.",
         "desain UI/UX.",
         "solusi teknologi inovatif."
     ];
-    
+
     let wordIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
     let typingSpeed = 100;
-    
+
     function type() {
         const currentWord = words[wordIndex];
-        
+
         if (isDeleting) {
             target.textContent = currentWord.substring(0, charIndex - 1);
             charIndex--;
@@ -816,7 +816,7 @@ function initTypewriter() {
             charIndex++;
             typingSpeed = 100; // Type speed
         }
-        
+
         if (!isDeleting && charIndex === currentWord.length) {
             isDeleting = true;
             typingSpeed = 2000; // Pause at end of word
@@ -825,10 +825,10 @@ function initTypewriter() {
             wordIndex = (wordIndex + 1) % words.length;
             typingSpeed = 500; // Pause before typing next word
         }
-        
+
         setTimeout(type, typingSpeed);
     }
-    
+
     setTimeout(type, 1000); // Initial delay
 }
 
@@ -839,35 +839,35 @@ function initTypewriter() {
 function initProjectCardEffects() {
     const cards = document.querySelectorAll('.project-card');
     if (cards.length === 0) return;
-    
+
     cards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            
+
             // Set CSS variables for spotlight glow
             card.style.setProperty('--mouse-x', `${x}px`);
             card.style.setProperty('--mouse-y', `${y}px`);
-            
+
             // Calculate 3D tilt angle
             const width = rect.width;
             const height = rect.height;
             const centerX = width / 2;
             const centerY = height / 2;
-            
+
             const mouseX = x - centerX;
             const mouseY = y - centerY;
-            
+
             // Limit max rotation to 8 degrees for subtle/premium feel
             const maxRotation = 8;
             const rotateX = -((mouseY / centerY) * maxRotation).toFixed(2);
             const rotateY = ((mouseX / centerX) * maxRotation).toFixed(2);
-            
+
             // Apply inline style with translateY (for hover lift) and rotateX/rotateY
             card.style.transform = `perspective(1000px) translateY(-12px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
-        
+
         card.addEventListener('mouseleave', () => {
             // Reset style properties to let CSS transition them back smoothly
             card.style.transform = '';
@@ -981,7 +981,7 @@ function showGitHubFallback() {
     const loading = document.getElementById('githubLoading');
     const content = document.getElementById('githubProfile');
     if (!loading || !content) return;
-    
+
     // Set fallback data
     document.getElementById('ghAvatar').src = 'public/images/profile.jpg';
     document.getElementById('ghName').textContent = 'Fajar Nur Farrijal';
@@ -989,7 +989,7 @@ function showGitHubFallback() {
     document.getElementById('ghLink').href = 'https://github.com/Fajarrr124314';
     document.getElementById('ghRepos').textContent = '12';
     document.getElementById('ghFollowers').textContent = '10+';
-    
+
     // Repos
     const reposList = document.getElementById('ghReposList');
     reposList.innerHTML = `
@@ -1015,7 +1015,7 @@ function showGitHubFallback() {
             </div>
         </li>
     `;
-    
+
     loading.style.display = 'none';
     content.style.display = 'block';
 }
@@ -1024,9 +1024,9 @@ function initGitHubStats() {
     const loading = document.getElementById('githubLoading');
     const content = document.getElementById('githubProfile');
     if (!loading || !content) return;
-    
+
     const username = 'Fajarrr124314';
-    
+
     // Fetch profile info
     fetch(`https://api.github.com/users/${username}`)
         .then(res => {
@@ -1040,7 +1040,7 @@ function initGitHubStats() {
             document.getElementById('ghLink').href = profile.html_url;
             document.getElementById('ghRepos').textContent = profile.public_repos;
             document.getElementById('ghFollowers').textContent = profile.followers;
-            
+
             // Fetch repos
             return fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=6`);
         })
@@ -1051,10 +1051,10 @@ function initGitHubStats() {
         .then(repos => {
             const reposList = document.getElementById('ghReposList');
             reposList.innerHTML = '';
-            
+
             // Filter out forks or just take the first 3
             const mainRepos = repos.filter(r => !r.fork).slice(0, 3);
-            
+
             // Language colors mapping
             const langColors = {
                 'JavaScript': '#f1e05a',
@@ -1064,19 +1064,19 @@ function initGitHubStats() {
                 'Python': '#3572A5',
                 'TypeScript': '#3178c6'
             };
-            
+
             if (mainRepos.length === 0) {
                 // If no public own repos, take first 3 repos in general
                 repos.slice(0, 3).forEach(repo => addRepoToList(repo));
             } else {
                 mainRepos.forEach(repo => addRepoToList(repo));
             }
-            
+
             function addRepoToList(repo) {
                 const li = document.createElement('li');
                 const lang = repo.language || 'HTML';
                 const color = langColors[lang] || '#8e92bc';
-                
+
                 li.innerHTML = `
                     <a href="${repo.html_url}" target="_blank" class="gh-repo-link">
                         <i class="fa-solid fa-folder-open"></i> ${repo.name}
@@ -1088,7 +1088,7 @@ function initGitHubStats() {
                 `;
                 reposList.appendChild(li);
             }
-            
+
             loading.style.display = 'none';
             content.style.display = 'block';
         })
@@ -1125,10 +1125,10 @@ function initAnalyticsDashboard() {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const isDark = document.body.classList.contains('dark-theme');
-    
+
     const textColor = isDark ? '#a4a7c6' : '#5a5d7c';
     const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(108, 92, 231, 0.06)';
-    
+
     const data = {
         labels: ["HTML/CSS", "JavaScript", "PHP", "SQL / DB", "Python / Data"],
         datasets: [{
@@ -1146,7 +1146,7 @@ function initAnalyticsDashboard() {
             borderRadius: 6
         }]
     };
-    
+
     const config = {
         type: 'bar',
         data: data,
@@ -1190,21 +1190,21 @@ function initAnalyticsDashboard() {
             }
         }
     };
-    
+
     window.analyticsChartInstance = new Chart(ctx, config);
 }
 
 function updateAnalyticsDashboard(category) {
     const data = analyticsData[category];
     if (!data) return;
-    
+
     // Update metric numbers with slight fade effect
     const elements = {
         projects: document.getElementById('metricProjects'),
         hours: document.getElementById('metricHours'),
         languages: document.getElementById('metricLanguages')
     };
-    
+
     Object.keys(elements).forEach(key => {
         const el = elements[key];
         if (el) {
@@ -1217,7 +1217,7 @@ function updateAnalyticsDashboard(category) {
             }, 200);
         }
     });
-    
+
     // Update Chart
     if (window.analyticsChartInstance) {
         window.analyticsChartInstance.data.datasets[0].data = data.values;
@@ -1237,9 +1237,9 @@ window.updateAnalyticsDashboard = updateAnalyticsDashboard;
 function toggleChatbot() {
     const chatWindow = document.getElementById('chatbotWindow');
     if (!chatWindow) return;
-    
+
     chatWindow.classList.toggle('active');
-    
+
     // Auto scroll to bottom when opened
     if (chatWindow.classList.contains('active')) {
         const msgContainer = document.getElementById('chatbotMessages');
@@ -1262,11 +1262,11 @@ let isBotTyping = false;
 
 function askAstroBot(topic) {
     if (isBotTyping) return;
-    
+
     const msgContainer = document.getElementById('chatbotMessages');
     const repliesContainer = document.getElementById('chatbotReplies');
     if (!msgContainer || !repliesContainer) return;
-    
+
     // User message mapping for UI display
     const topicQuestions = {
         siapa: "Siapa Fajar?",
@@ -1274,23 +1274,23 @@ function askAstroBot(topic) {
         proyek: "Apa saja proyek terbarunya?",
         kontak: "Bagaimana cara menghubunginya?"
     };
-    
+
     const userText = topicQuestions[topic] || "Tanya sesuatu...";
-    
+
     // 1. Add User Message
     const userMsgDiv = document.createElement('div');
     userMsgDiv.className = "chat-message user-msg";
     userMsgDiv.innerHTML = `<p>${userText}</p>`;
     msgContainer.appendChild(userMsgDiv);
-    
+
     // Scroll to bottom
     msgContainer.scrollTop = msgContainer.scrollHeight;
-    
+
     // Disable replies during typing
     const chips = repliesContainer.querySelectorAll('.reply-chip');
     chips.forEach(chip => chip.disabled = true);
     isBotTyping = true;
-    
+
     // 2. Show Typing Indicator
     setTimeout(() => {
         const typingDiv = document.createElement('div');
@@ -1303,25 +1303,25 @@ function askAstroBot(topic) {
         `;
         msgContainer.appendChild(typingDiv);
         msgContainer.scrollTop = msgContainer.scrollHeight;
-        
+
         // 3. Add Bot Response after typing delay
         setTimeout(() => {
             const indicator = document.getElementById('typingIndicator');
             if (indicator) indicator.remove();
-            
+
             const botMsgDiv = document.createElement('div');
             botMsgDiv.className = "chat-message bot-msg";
             botMsgDiv.innerHTML = `<p>${botReplies[topic] || 'Maaf, saya tidak mengerti pertanyaan tersebut.'}</p>`;
             msgContainer.appendChild(botMsgDiv);
-            
+
             // Scroll to bottom
             msgContainer.scrollTop = msgContainer.scrollHeight;
-            
+
             // Re-enable replies
             chips.forEach(chip => chip.disabled = false);
             isBotTyping = false;
         }, 1200);
-        
+
     }, 400);
 }
 
@@ -1336,9 +1336,9 @@ window.askAstroBot = askAstroBot;
 function toggleWaPopup() {
     const waPopup = document.getElementById('waPopup');
     if (!waPopup) return;
-    
+
     waPopup.classList.toggle('active');
-    
+
     // Hide notification badge when opened
     const badge = document.querySelector('.wa-badge');
     if (badge && waPopup.classList.contains('active')) {
@@ -1348,21 +1348,21 @@ function toggleWaPopup() {
 
 function sendWaMessage(text) {
     if (!text || text.trim() === "") return;
-    
+
     const phoneNumber = "62895806317711";
     const encodedText = encodeURIComponent(text);
     const waUrl = `https://wa.me/${phoneNumber}?text=${encodedText}`;
-    
+
     window.open(waUrl, '_blank', 'noopener,noreferrer');
 }
 
 function triggerCustomWaMessage() {
     const input = document.getElementById('waInputText');
     if (!input) return;
-    
+
     const text = input.value.trim();
     if (text === "") return;
-    
+
     sendWaMessage(text);
     input.value = ""; // Clear input
 }
