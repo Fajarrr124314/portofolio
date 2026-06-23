@@ -57,6 +57,7 @@ body.dark-theme {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -180,6 +181,7 @@ body {
     border-radius: var(--border-radius-md);
     box-shadow: var(--glass-shadow);
     transition: var(--transition-smooth);
+    will-change: transform, border-color, box-shadow;
 }
 
 .glass-card:hover {
@@ -202,6 +204,7 @@ body {
     text-decoration: none;
     transition: var(--transition-smooth);
     border: 2px solid transparent;
+    will-change: transform, box-shadow;
 }
 
 .btn-primary {
@@ -242,6 +245,7 @@ body {
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--glass-border);
     transition: var(--transition-smooth), background-color 0.4s ease, border-color 0.4s ease;
+    will-change: background-color, backdrop-filter, box-shadow;
 }
 
 .header.scrolled {
@@ -788,6 +792,7 @@ body.dark-theme .profile-img {
     padding: 20px 10px;
     scrollbar-width: thin;
     scrollbar-color: rgba(108, 92, 231, 0.2) transparent;
+    -webkit-overflow-scrolling: touch;
 }
 
 .portfolio-scroll-container::-webkit-scrollbar {
@@ -805,8 +810,12 @@ body.dark-theme .profile-img {
 
 /* Project Cards */
 .project-card {
+    position: relative;
     flex: 0 0 360px;
-    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    height: 480px;
+    background: var(--glass-bg);
     overflow: hidden;
     cursor: pointer;
     border-radius: var(--border-radius-md);
@@ -821,6 +830,7 @@ body.dark-theme .profile-img {
         flex-basis 0.4s cubic-bezier(0.16, 1, 0.3, 1),
         margin 0.4s cubic-bezier(0.16, 1, 0.3, 1),
         padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, border-color, box-shadow;
 }
 
 .project-card:hover {
@@ -1077,6 +1087,7 @@ body.dark-theme .project-card::after {
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    will-change: transform;
 }
 
 .cert-card:hover .cert-img-container img {
@@ -1418,6 +1429,7 @@ body.dark-theme .project-card::after {
     box-shadow: 0 30px 70px rgba(0, 0, 0, 0.15);
     z-index: 10;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     transform: scale(0.95);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -1708,6 +1720,7 @@ body.dark-theme .project-card::after {
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, opacity;
 }
 
 .animate-play {
@@ -2200,6 +2213,7 @@ body.dark-theme .resume-section {
     /* Standard A4 paper ratio */
     background: #ffffff;
     max-width: 100%;
+    will-change: transform, border-color, box-shadow;
 }
 
 .cv-preview-card:hover {
@@ -2220,6 +2234,7 @@ body.dark-theme .cv-preview-card:hover {
     object-position: top;
     transition: transform 0.5s ease;
     display: block;
+    will-change: transform;
 }
 
 .cv-preview-card:hover .cv-preview-img {
@@ -2891,6 +2906,7 @@ body.dark-theme .gh-repos-list li {
     flex-direction: column;
     gap: 15px;
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
 .chat-message {
@@ -3851,6 +3867,64 @@ body.dark-theme .wa-quick-msg {
 
     .game-canvas-wrapper {
         height: 160px;
+    }
+
+    /* Disable scroll transitions on mobile for maximum scrolling performance */
+    .animate-init {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+
+    /* Disable fixed background twinkling/floating animations on mobile to reduce GPU composite overhead */
+    .stars {
+        animation: none !important;
+        opacity: 0.45 !important;
+    }
+    
+    .nebula-1,
+    .nebula-2 {
+        animation: none !important;
+        mix-blend-mode: normal !important; /* Multiply is extremely expensive on mobile */
+        filter: blur(80px) !important;      /* Lower blur value requires less GPU fill-rate */
+    }
+
+    /* Disable backdrop-filter (blur) on mobile to completely prevent scrolling stutter */
+    .glass-card,
+    .header,
+    .nav-menu,
+    .accent-dropdown,
+    .wa-popup-box,
+    .chatbot-window {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+    }
+
+    /* Fallback solid/translucent background colors for cards & elements without blur */
+    .glass-card {
+        background: rgba(255, 255, 255, 0.94) !important;
+        border-color: rgba(108, 92, 231, 0.15) !important;
+    }
+    
+    body.dark-theme .glass-card {
+        background: rgba(12, 12, 32, 0.96) !important;
+        border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+
+    .header {
+        background: rgba(255, 255, 255, 0.96) !important;
+    }
+
+    body.dark-theme .header {
+        background: rgba(7, 7, 20, 0.96) !important;
+    }
+
+    .nav-menu {
+        background: rgba(255, 255, 255, 0.98) !important;
+    }
+
+    body.dark-theme .nav-menu {
+        background: rgba(12, 12, 32, 0.98) !important;
     }
 }
 
