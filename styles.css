@@ -1789,9 +1789,12 @@ body.dark-theme .project-card::after {
 }
 
 @keyframes starsTwinkle {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 0.35;
     }
+
     50% {
         opacity: 0.85;
     }
@@ -3881,12 +3884,14 @@ body.dark-theme .wa-quick-msg {
         animation: none !important;
         opacity: 0.45 !important;
     }
-    
+
     .nebula-1,
     .nebula-2 {
         animation: none !important;
-        mix-blend-mode: normal !important; /* Multiply is extremely expensive on mobile */
-        filter: blur(80px) !important;      /* Lower blur value requires less GPU fill-rate */
+        mix-blend-mode: normal !important;
+        /* Multiply is extremely expensive on mobile */
+        filter: blur(80px) !important;
+        /* Lower blur value requires less GPU fill-rate */
     }
 
     /* Disable backdrop-filter (blur) on mobile to completely prevent scrolling stutter */
@@ -3905,7 +3910,7 @@ body.dark-theme .wa-quick-msg {
         background: rgba(255, 255, 255, 0.94) !important;
         border-color: rgba(108, 92, 231, 0.15) !important;
     }
-    
+
     body.dark-theme .glass-card {
         background: rgba(12, 12, 32, 0.96) !important;
         border-color: rgba(255, 255, 255, 0.06) !important;
@@ -3934,6 +3939,7 @@ body.dark-theme .wa-quick-msg {
         width: 100%;
         gap: 10px;
     }
+
     .hero-buttons .btn {
         width: 100%;
     }
