@@ -899,7 +899,7 @@ function openCvLightbox() {
     const caption = document.getElementById('lightboxCaption');
     if (!lightbox || !img || !caption) return;
 
-    img.src = "public/images/CV_FajarNF_New.webp";
+    img.src = "public/images/CV_FajarNF_Update.jpg";
     caption.textContent = "Curriculum Vitae - Fajar Nur Farrijal";
 
     lightbox.classList.add('active');
