@@ -1855,6 +1855,14 @@ body.dark-theme .project-card::after {
 }
 
 @media (max-width: 768px) {
+    .hero-section {
+        padding-bottom: 130px;
+    }
+
+    .scroll-indicator {
+        bottom: 10px;
+    }
+
     html {
         font-size: 15px;
     }
