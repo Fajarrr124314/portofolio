@@ -409,6 +409,7 @@ body.dark-theme .header.scrolled {
 
 .hero-buttons {
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
 }
 
@@ -3652,6 +3653,96 @@ body.dark-theme .wa-quick-msg {
     background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.3) 0%, rgba(var(--accent-rgb), 0.1) 100%);
     box-shadow: 0 0 15px rgba(var(--accent-rgb), 0.4);
     transform: translateY(-2px);
+}
+
+/* Lightning Button with Spinning Outline */
+.btn-lightning {
+    position: relative;
+    z-index: 1;
+    background: transparent;
+    color: var(--accent);
+    overflow: hidden;
+    border: none;
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.15);
+    transition: var(--transition-smooth);
+}
+
+.btn-lightning::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250%;
+    aspect-ratio: 1 / 1;
+    background: conic-gradient(
+        from 0deg,
+        transparent 50%,
+        #00cec9 68%, /* Lightning Cyan */
+        #6c5ce7 80%, /* Accent Purple */
+        #fd79a8 90%, /* Pink accent */
+        #00cec9 97%,
+        transparent 100%
+    );
+    animation: rotateLightning 1.8s linear infinite; /* Active by default */
+    z-index: -2;
+    will-change: transform;
+}
+
+.btn-lightning::after {
+    content: '';
+    position: absolute;
+    inset: 2px; /* acts as border width */
+    background: rgba(255, 255, 255, 0.88); /* Translucent by default in light mode */
+    border-radius: 50px;
+    z-index: -1;
+    transition: var(--transition-smooth);
+}
+
+@keyframes rotateLightning {
+    0% {
+        transform: translate3d(-50%, -50%, 0) rotate(0deg);
+    }
+    100% {
+        transform: translate3d(-50%, -50%, 0) rotate(360deg);
+    }
+}
+
+.btn-lightning:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(0, 206, 201, 0.7), 0 0 20px rgba(108, 92, 231, 0.5);
+    color: #00cec9;
+    text-shadow: 0 0 8px rgba(0, 206, 201, 0.7);
+}
+
+.btn-lightning:hover::before {
+    animation-duration: 1s; /* Speed up even more on hover */
+}
+
+.btn-lightning:hover::after {
+    background: rgba(255, 255, 255, 0.8); /* Bleed even more on hover */
+}
+
+.btn-lightning:active {
+    transform: translateY(-1px) scale(1.0);
+    box-shadow: 0 4px 12px rgba(0, 206, 201, 0.3);
+}
+
+body.dark-theme .btn-lightning {
+    color: #ffffff;
+    text-shadow: 0 0 8px rgba(0, 206, 201, 0.6);
+}
+
+body.dark-theme .btn-lightning:hover {
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(0, 206, 201, 0.9), 0 0 3px #ffffff;
+}
+
+body.dark-theme .btn-lightning::after {
+    background: rgba(12, 12, 32, 0.8); /* Translucent by default in dark mode */
+}
+
+body.dark-theme .btn-lightning:hover::after {
+    background: rgba(12, 12, 32, 0.75);
 }
 
 .game-modal-content {
