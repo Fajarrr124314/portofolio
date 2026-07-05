@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initGeoGreeting();
     fetchNasaApod();
     init3DTagCloud();
+    initVisitorCounter();
 });
 
 /* ==========================================================================
@@ -2253,6 +2254,55 @@ function drawObstacle(ctx, obs) {
     ctx.fill();
 
     ctx.restore();
+}
+
+/* ==========================================================================
+   22. VISITOR COUNTER LOGIC
+   ========================================================================== */
+
+async function initVisitorCounter() {
+    const counterEl = document.getElementById('visitorCounter');
+    if (!counterEl) return;
+
+    const namespace = 'fajarrr124314';
+    const key = 'portfolio-visits-v2';
+    const baseCount = 120; // Starting baseline count
+    
+    // Check if the user has already visited in this session to prevent spam-refresh increments
+    const hasVisited = sessionStorage.getItem('has_visited_portfolio');
+    const action = hasVisited ? 'get' : 'up';
+    
+    try {
+        const response = await fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/${action}`);
+        if (!response.ok) throw new Error('Counter API error');
+        
+        const data = await response.json();
+        // Add the base count of 120 to the live counter value
+        const count = data.value + baseCount;
+        
+        counterEl.innerHTML = `<i class="fa-solid fa-users"></i> <span>${count.toLocaleString('id-ID')}</span> kunjungan`;
+        
+        if (!hasVisited) {
+            sessionStorage.setItem('has_visited_portfolio', 'true');
+        }
+    } catch (error) {
+        console.error('Visitor counter error:', error);
+        
+        // Fallback: local counter via localStorage if API is down
+        let localCount = localStorage.getItem('portfolio_local_visits_v2');
+        if (!localCount) {
+            localCount = baseCount; // Start at 120
+            localStorage.setItem('portfolio_local_visits_v2', localCount);
+        }
+        
+        if (!hasVisited) {
+            localCount = parseInt(localCount) + 1;
+            localStorage.setItem('portfolio_local_visits_v2', localCount);
+            sessionStorage.setItem('has_visited_portfolio', 'true');
+        }
+        
+        counterEl.innerHTML = `<i class="fa-solid fa-users"></i> <span>${parseInt(localCount).toLocaleString('id-ID')}</span> kunjungan`;
+    }
 }
 
 window.openGameModal = openGameModal;

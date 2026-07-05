@@ -1384,6 +1384,40 @@ body.dark-theme .project-card::after {
     color: var(--text-muted) !important;
 }
 
+.visitor-counter-wrapper {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.visitor-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    background: rgba(108, 92, 231, 0.05);
+    border: 1px solid rgba(108, 92, 231, 0.15);
+    border-radius: 30px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+.visitor-counter:hover {
+    background: rgba(108, 92, 231, 0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.visitor-counter i {
+    color: var(--accent);
+    font-size: 0.9rem;
+}
+
 /* ==========================================================================
    INTERACTIVE PORTFOLIO DETAILS MODAL
    ========================================================================== */
