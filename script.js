@@ -1486,7 +1486,7 @@ function initGeoGreeting() {
 
     // Fallback message
     const setFallbackGreeting = () => {
-        greetingEl.innerHTML = "Halo penjelajah antariksa! Selamat datang di ruang portofolio Fajar. Selamat menjelajahi proyek-proyek saya!";
+        greetingEl.innerHTML = "Halo penjelajah! Selamat datang di ruang portofolio Fajar. Selamat menjelajahi proyek-proyek saya!";
         const dot = document.querySelector('.geo-status-dot');
         if (dot) dot.style.backgroundColor = "var(--accent)";
     };
