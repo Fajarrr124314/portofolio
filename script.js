@@ -2277,8 +2277,9 @@ async function initVisitorCounter() {
         if (!response.ok) throw new Error('Counter API error');
         
         const data = await response.json();
-        // Add the base count of 120 to the live counter value
-        const count = data.value + baseCount;
+        // Add the base count of 120 to the live counter value (CounterAPI v1 uses 'count' field)
+        const liveCount = typeof data.count === 'number' ? data.count : (typeof data.value === 'number' ? data.value : 0);
+        const count = liveCount + baseCount;
         
         counterEl.innerHTML = `<i class="fa-solid fa-users"></i> <span>${count.toLocaleString('id-ID')}</span> kunjungan`;
         
