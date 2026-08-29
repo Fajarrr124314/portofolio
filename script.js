@@ -2428,3 +2428,44 @@ function forceExitMatrixMode() {
 }
 
 window.activateMatrixMode = activateMatrixMode;
+
+/* ==========================================================================
+   23. SCROLL PROGRESS & ROCKET LOGIC
+   ========================================================================== */
+const progressBar = document.getElementById('scrollProgressBar');
+const rocketBtn = document.getElementById('rocketToTop');
+
+window.addEventListener('scroll', () => {
+    // Scroll Progress
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    if (progressBar) {
+        progressBar.style.width = scrolled + "%";
+    }
+
+    // Rocket Visibility
+    if (rocketBtn) {
+        if (winScroll > 300) {
+            rocketBtn.classList.add('visible');
+        } else {
+            rocketBtn.classList.remove('visible');
+            rocketBtn.classList.remove('flying'); // Reset state
+        }
+    }
+});
+
+function scrollToTop() {
+    if (rocketBtn) {
+        rocketBtn.classList.add('flying');
+    }
+    // Timeout to allow animation to play before scrolling fast
+    setTimeout(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, 200);
+}
+
+window.scrollToTop = scrollToTop;
