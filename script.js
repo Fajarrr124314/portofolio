@@ -1248,7 +1248,8 @@ const botReplies = {
     skills: "Berikut adalah keahlian utama Fajar:<br><br>🛸 <strong>Frontend:</strong> HTML5, CSS3, JavaScript (ES6+), Tailwind CSS, Bootstrap<br>🌌 <strong>Backend:</strong> PHP, Node.js, RESTful API<br>🛰️ <strong>Database:</strong> MySQL / SQL<br>📊 <strong>Lainnya:</strong> Data Visualization, Dashboard Analytics, Sistem ATS & POS",
     proyek: "Fajar telah mengerjakan berbagai proyek menarik:<br><br>1. 🚀 <strong>Smart ATS:</strong> Portal HR dengan penyaringan CV otomatis menggunakan AI.<br>2. 🛒 <strong>Yogya Fresh Pro:</strong> Sistem POS retail dengan label barcode pencetakan harga.<br>3. ☕ <strong>Warkop Pendopo:</strong> Website reservasi tempat kopi UMKM dengan WhatsApp ordering.",
     kontak: "Anda bisa menghubungi Fajar dengan cepat melalui:<br><br>📱 <strong>WhatsApp:</strong> 0895806317711<br>✉️ <strong>Email:</strong> fajarnf77@gmail.com<br>🔗 <strong>LinkedIn:</strong> <a href='https://www.linkedin.com/in/fajar-nur-farrijal-448644255/' target='_blank' style='color:var(--accent); font-weight:700; text-decoration:none;'>Fajar Nur Farrijal</a><br><br>Atau silakan isi <strong>Form Kontak</strong> di bawah untuk mengirim pesan langsung!",
-    game: "Wah, Anda menemukan Easter Egg! 🎮 Klik tombol di bawah ini untuk bermain <strong>Astro-Jump</strong>:<br><br><button onclick='openGameModal(); toggleChatbot();' class='btn btn-primary btn-sm' style='padding:6px 12px; font-size:0.85rem;'><i class='fa-solid fa-gamepad'></i> Main Astro-Jump</button>"
+    game: "Wah, Anda menemukan Easter Egg! 🎮 Klik tombol di bawah ini untuk bermain <strong>Astro-Jump</strong>:<br><br><button onclick='openGameModal(); toggleChatbot();' class='btn btn-primary btn-sm' style='padding:6px 12px; font-size:0.85rem;'><i class='fa-solid fa-gamepad'></i> Main Astro-Jump</button>",
+    konami: "Ssst... 🤫 Anda suka misteri? Coba tekan tombol <strong>'Rahasia? 🤫'</strong> di bagian depan layar, atau ketikkan kode legendaris ini: <strong style='color:var(--accent)'>Atas, Atas, Bawah, Bawah, Kiri, Kanan, Kiri, Kanan, B, A</strong>"
 };
 
 let isBotTyping = false;
@@ -1266,7 +1267,8 @@ function askAstroBot(topic) {
         skills: "Apa saja keahliannya?",
         proyek: "Apa saja proyek terbarunya?",
         kontak: "Bagaimana cara menghubunginya?",
-        game: "Main Game? 🎮"
+        game: "Main Game? 🎮",
+        konami: "Ada rahasia lain? 🤫"
     };
 
     const userText = topicQuestions[topic] || "Tanya sesuatu...";
@@ -2289,3 +2291,140 @@ window.openGameModal = openGameModal;
 window.closeGameModal = closeGameModal;
 window.startGame = startGame;
 
+/* ==========================================================================
+   21. KONAMI CODE EASTER EGG (MATRIX RAIN)
+   ========================================================================== */
+const konamiCode = [
+    'arrowup', 'arrowup', 
+    'arrowdown', 'arrowdown', 
+    'arrowleft', 'arrowright', 
+    'arrowleft', 'arrowright', 
+    'b', 'a'
+];
+let konamiPosition = 0;
+
+document.addEventListener('keydown', (e) => {
+    const key = e.key.toLowerCase();
+    
+    if (key === konamiCode[konamiPosition]) {
+        konamiPosition++;
+        if (konamiPosition === konamiCode.length) {
+            activateMatrixMode();
+            konamiPosition = 0; // Reset
+        }
+    } else {
+        konamiPosition = 0; // Reset if wrong key
+    }
+});
+
+let matrixInterval;
+let matrixCanvas;
+
+function activateMatrixMode() {
+    // Prevent multiple activations
+    if (document.getElementById('matrix-canvas')) return;
+
+    // Create canvas
+    matrixCanvas = document.createElement('canvas');
+    matrixCanvas.id = 'matrix-canvas';
+    matrixCanvas.style.position = 'fixed';
+    matrixCanvas.style.top = '0';
+    matrixCanvas.style.left = '0';
+    matrixCanvas.style.width = '100vw';
+    matrixCanvas.style.height = '100vh';
+    matrixCanvas.style.zIndex = '9999';
+    matrixCanvas.style.pointerEvents = 'auto'; // Allow clicking to close on mobile
+    document.body.appendChild(matrixCanvas);
+
+    const ctx = matrixCanvas.getContext('2d');
+    
+    // Make canvas full screen
+    matrixCanvas.width = window.innerWidth;
+    matrixCanvas.height = window.innerHeight;
+
+    // Matrix characters
+    const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレゲゼデベペオォコソトノホモヨョロゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const charArray = chars.split('');
+
+    const fontSize = 16;
+    const columns = matrixCanvas.width / fontSize;
+    const drops = [];
+
+    // x coordinate -> y coordinate
+    for (let x = 0; x < columns; x++) {
+        drops[x] = 1;
+    }
+
+    function drawMatrix() {
+        // Translucent black background to show trail
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+        ctx.fillStyle = '#0F0'; // Green text
+        ctx.font = fontSize + 'px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+            const text = charArray[Math.floor(Math.random() * charArray.length)];
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+
+    matrixInterval = setInterval(drawMatrix, 33);
+
+    // Show a notification
+    const notification = document.createElement('div');
+    notification.id = 'matrix-notification';
+    notification.innerHTML = 'HACKER MODE ACTIVATED<br><span style="font-size: 0.8em; color: #fff;">Tekan ESC atau Tap layar untuk keluar</span>';
+    notification.style.position = 'fixed';
+    notification.style.top = '50%';
+    notification.style.left = '50%';
+    notification.style.transform = 'translate(-50%, -50%)';
+    notification.style.backgroundColor = 'rgba(0, 20, 0, 0.8)';
+    notification.style.color = '#0f0';
+    notification.style.padding = '30px 50px';
+    notification.style.border = '2px solid #0f0';
+    notification.style.fontFamily = 'monospace';
+    notification.style.fontSize = '28px';
+    notification.style.fontWeight = 'bold';
+    notification.style.textAlign = 'center';
+    notification.style.zIndex = '10000';
+    notification.style.textShadow = '0 0 10px #0f0';
+    notification.style.boxShadow = '0 0 30px rgba(0, 255, 0, 0.5)';
+    notification.style.borderRadius = '8px';
+    notification.style.pointerEvents = 'none';
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.transition = 'opacity 1s ease-out';
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 1000);
+    }, 3000);
+
+    // Add escape listener
+    document.addEventListener('keydown', exitMatrixMode);
+    matrixCanvas.addEventListener('click', forceExitMatrixMode);
+}
+
+function exitMatrixMode(e) {
+    if (e.key === 'Escape') {
+        forceExitMatrixMode();
+    }
+}
+
+function forceExitMatrixMode() {
+    if (matrixInterval) clearInterval(matrixInterval);
+    if (matrixCanvas) {
+        matrixCanvas.style.transition = 'opacity 0.5s';
+        matrixCanvas.style.opacity = '0';
+        setTimeout(() => matrixCanvas.remove(), 500);
+    }
+    document.removeEventListener('keydown', exitMatrixMode);
+}
+
+window.activateMatrixMode = activateMatrixMode;
