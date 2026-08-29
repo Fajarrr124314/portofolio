@@ -371,28 +371,7 @@ const projectData = {
         demoLink: "",
         repoLink: "https://github.com/Fajarrr124314/vieroku-management"
     },
-    zslaw: {
-        title: "ZS Law Firm & Associate Digital Portal",
-        category: "Portal Hukum (Legal Tech)",
-        description: "ZS Law Firm & Associate Digital Portal (berlabel 'Future Legal') merupakan platform teknologi hukum (Legal Tech) modern yang menyatukan klien dengan pengacara profesional secara virtual. Melalui portal ini, klien dapat melakukan konsultasi hukum, membuat janji temu, serta mengelola dokumen hukum.",
-        images: [
-            "public/images/legal 1.webp",
-            "public/images/legal 2.webp",
-            "public/images/legal 3.webp",
-            "public/images/legal 4.webp",
-            "public/images/legal 5.webp"
-        ],
-        features: [
-            "Online Case Case Consultation Form: Memudahkan klien mengajukan analisis awal kasus hukum mereka.",
-            "Lawyer Scheduling Calendar: Sistem pemesanan jadwal tatap muka/telekonsultasi bersama partner pengacara.",
-            "Legal Drafting Module: Manajemen pengunggahan dan revisi draf surat perjanjian atau dokumen legalitas.",
-            "Premium Dark & Light UI Toggle: Antarmuka premium dengan transisi warna halus untuk kenyamanan membaca berkas hukum.",
-            "Law Firm Admin Board: Kelola portofolio pengacara, bidang keahlian hukum, dan detail tagihan klien."
-        ],
-        tech: ["Tailwind CSS", "Legal Tech Features", "Interactive Theme Toggle", "Admin Dashboard"],
-        demoLink: "https://fajarrr124314.github.io/zslawfirm",
-        repoLink: "https://github.com/Fajarrr124314/zslawfirm"
-    },
+
     smartats: {
         title: "Smart ATS Portal - PT Indonesia",
         category: "Sistem ATS (Ongoing Project)",
@@ -928,9 +907,9 @@ const timelineData = {
         techs: ["Job Portal", "PHP / MySQL", "Kompetisi UI/UX", "Problem Solving"]
     },
     '2026': {
-        title: "Sistem POS Yogya Fresh, Proyek ZA, & Smart ATS",
-        desc: "Tahun produktif dalam merancang solusi nyata: Yogya Fresh System Pro (Sistem Labeling & POS retail), portal hukum modern Proyek ZA (ZS Law Firm), Warung Kopi Pendopo (Web UMKM & WhatsApp Ordering), serta sedang menyelesaikan Smart ATS (Applicant Tracking System dengan AI screening).",
-        techs: ["Sistem POS", "Legal Tech", "Smart ATS", "Node.js & AI", "HTML/CSS/JS"]
+        title: "Sistem POS Yogya Fresh & Smart ATS",
+        desc: "Tahun produktif dalam merancang solusi nyata: Yogya Fresh System Pro (Sistem Labeling & POS retail), Warung Kopi Pendopo (Web UMKM & WhatsApp Ordering), serta sedang menyelesaikan Smart ATS (Applicant Tracking System dengan AI screening).",
+        techs: ["Sistem POS", "Smart ATS", "Node.js & AI", "HTML/CSS/JS"]
     },
     '2027': {
         title: "Kelulusan S1 Informatika & Karir Profesional",
@@ -1267,7 +1246,7 @@ function toggleChatbot() {
 const botReplies = {
     siapa: "Fajar Nur Farrijal adalah Mahasiswa S1 Informatika yang berfokus pada Full-Stack Web Development, Data Analytics, dan Desain UI/UX. Fajar memiliki hasrat besar untuk memecahkan masalah kompleks lewat baris kode yang efisien dan estetika visual yang premium.",
     skills: "Berikut adalah keahlian utama Fajar:<br><br>🛸 <strong>Frontend:</strong> HTML5, CSS3, JavaScript (ES6+), Tailwind CSS, Bootstrap<br>🌌 <strong>Backend:</strong> PHP, Node.js, RESTful API<br>🛰️ <strong>Database:</strong> MySQL / SQL<br>📊 <strong>Lainnya:</strong> Data Visualization, Dashboard Analytics, Sistem ATS & POS",
-    proyek: "Fajar telah mengerjakan berbagai proyek menarik:<br><br>1. 🚀 <strong>Smart ATS:</strong> Portal HR dengan penyaringan CV otomatis menggunakan AI.<br>2. 🛒 <strong>Yogya Fresh Pro:</strong> Sistem POS retail dengan label barcode pencetakan harga.<br>3. ⚖️ <strong>ZS Law Firm:</strong> Portal hukum digital premium dengan toggle mode Gelap/Terang.<br>4. ☕ <strong>Warkop Pendopo:</strong> Website reservasi tempat kopi UMKM dengan WhatsApp ordering.",
+    proyek: "Fajar telah mengerjakan berbagai proyek menarik:<br><br>1. 🚀 <strong>Smart ATS:</strong> Portal HR dengan penyaringan CV otomatis menggunakan AI.<br>2. 🛒 <strong>Yogya Fresh Pro:</strong> Sistem POS retail dengan label barcode pencetakan harga.<br>3. ☕ <strong>Warkop Pendopo:</strong> Website reservasi tempat kopi UMKM dengan WhatsApp ordering.",
     kontak: "Anda bisa menghubungi Fajar dengan cepat melalui:<br><br>📱 <strong>WhatsApp:</strong> 0895806317711<br>✉️ <strong>Email:</strong> fajarnf77@gmail.com<br>🔗 <strong>LinkedIn:</strong> <a href='https://www.linkedin.com/in/fajar-nur-farrijal-448644255/' target='_blank' style='color:var(--accent); font-weight:700; text-decoration:none;'>Fajar Nur Farrijal</a><br><br>Atau silakan isi <strong>Form Kontak</strong> di bawah untuk mengirim pesan langsung!",
     game: "Wah, Anda menemukan Easter Egg! 🎮 Klik tombol di bawah ini untuk bermain <strong>Astro-Jump</strong>:<br><br><button onclick='openGameModal(); toggleChatbot();' class='btn btn-primary btn-sm' style='padding:6px 12px; font-size:0.85rem;'><i class='fa-solid fa-gamepad'></i> Main Astro-Jump</button>"
 };
