@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchNasaApod();
     init3DTagCloud();
     initVisitorCounter();
+    initCustomCursor();
 });
 
 /* ==========================================================================
@@ -2469,3 +2470,41 @@ function scrollToTop() {
 }
 
 window.scrollToTop = scrollToTop;
+
+/* ==========================================================================
+   21. CUSTOM CURSOR (KURSOR KOSMIK) LOGIC
+   ========================================================================== */
+
+function initCustomCursor() {
+    // Hanya aktifkan jika device mendukung mouse/hover (bukan touch screen)
+    if (window.matchMedia("(hover: none)").matches) return;
+
+    const cursor = document.getElementById('customCursor');
+    const trail = document.getElementById('customCursorTrail');
+    
+    if (!cursor || !trail) return;
+
+    // Gunakan transform3d untuk performa maksimal (GPU Accelerated) dan tanpa delay
+    window.addEventListener('mousemove', (e) => {
+        // Dot dan trail bergerak bersamaan seketika, titik selalu di tengah
+        const x = e.clientX;
+        const y = e.clientY;
+        
+        cursor.style.transform = `translate3d(calc(${x}px - 50%), calc(${y}px - 50%), 0)`;
+        trail.style.transform = `translate3d(calc(${x}px - 50%), calc(${y}px - 50%), 0)`;
+    }, { passive: true });
+
+    // Hover effect untuk elemen yang bisa di-klik
+    const clickables = document.querySelectorAll('a, button, input, textarea, select, .interactive-card, .filter-btn, .carousel-dot, .timeline-node, .resume-card-container, .cert-card, .project-card, .cv-preview-card, .theme-toggle, .menu-toggle');
+    
+    clickables.forEach((el) => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hover');
+            trail.classList.add('hover');
+        });
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hover');
+            trail.classList.remove('hover');
+        });
+    });
+}
