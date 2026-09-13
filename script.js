@@ -1031,7 +1031,10 @@ function initGitHubStats() {
             document.getElementById('ghName').textContent = profile.name || username;
             document.getElementById('ghBio').textContent = profile.bio || 'Web Developer & Data Analyst';
             document.getElementById('ghLink').href = profile.html_url;
-            document.getElementById('ghRepos').textContent = profile.public_repos;
+            // API GitHub hanya mengirimkan jumlah repository publik.
+            // Tambahkan jumlah repository private (5) agar sesuai dengan total asli (20).
+            const privateReposCount = 5; 
+            document.getElementById('ghRepos').textContent = profile.public_repos + privateReposCount;
             document.getElementById('ghFollowers').textContent = profile.followers;
 
             // Fetch repos

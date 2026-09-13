@@ -4262,11 +4262,11 @@ body.dark-theme .btn-lightning:hover::after {
     border: 4px solid rgba(var(--accent-rgb), 0.2);
     border-top-color: var(--accent);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spinLoading 1s linear infinite;
     margin: 0 auto 1.5rem auto;
 }
 
-@keyframes spin {
+@keyframes spinLoading {
     100% {
         transform: rotate(360deg);
     }
